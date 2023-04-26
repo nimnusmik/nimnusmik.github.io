@@ -1311,7 +1311,8 @@ print("AUC: ",auc)
 
 
     
-![png](output_34_1.png)
+![output_34_1](https://user-images.githubusercontent.com/91577581/234586339-53314b71-2a58-49ff-9d33-775b64ab98af.png)
+
     
 
 
@@ -1378,7 +1379,8 @@ print("AUC: ", auc)
 
 
     
-![png](output_41_1.png)
+![output_41_1](https://user-images.githubusercontent.com/91577581/234587708-6e9a6e67-d529-410e-b46f-85343df7da6f.png)
+
     
 
 
@@ -1761,7 +1763,8 @@ print("AUC: ", auc)
 
 
     
-![png](output_51_1.png)
+![output_51_1](https://user-images.githubusercontent.com/91577581/234587844-e2e137c0-7bdf-411c-987c-dbb38d476d1b.png)
+
     
 
 
@@ -1915,6 +1918,7 @@ print("AUC: ", auc)
 
 
     
-![png](output_58_1.png)
+![output_58_1](https://user-images.githubusercontent.com/91577581/234588089-2fd8de29-4391-44c8-b5d4-b2ecb16c6bf0.png)
+
     
 
