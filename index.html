@@ -1,4 +1,163 @@
----
-layout: home
-author_profile: true
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sunmin Kim — Data Engineering & Analytics</title>
+<meta name="description" content="Sunmin (Mina) Kim — M.S. Applied Data Science student at USC. Data engineering, BI, and analytics portfolio.">
+<style>
+  :root {
+    --bg: #fafaf8;
+    --card: #ffffff;
+    --ink: #1c1c1e;
+    --muted: #6b6b70;
+    --accent: #990000;   /* USC cardinal */
+    --accent2: #ffcc00;  /* USC gold */
+    --line: #e8e6e1;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+
+  header { padding: 72px 0 48px; border-bottom: 1px solid var(--line); }
+  .eyebrow { color: var(--accent); font-weight: 600; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 12px; }
+  h1 { font-size: 42px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; }
+  .tagline { font-size: 19px; color: var(--muted); max-width: 620px; margin-bottom: 24px; }
+  .tagline strong { color: var(--ink); }
+  .links { display: flex; gap: 12px; flex-wrap: wrap; }
+  .links a {
+    display: inline-block; padding: 9px 18px; border-radius: 8px; text-decoration: none;
+    font-weight: 600; font-size: 14.5px; border: 1.5px solid var(--line); color: var(--ink);
+    transition: all .15s ease;
+  }
+  .links a.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .links a:hover { border-color: var(--accent); color: var(--accent); }
+  .links a.primary:hover { background: #7a0000; color: #fff; }
+
+  section { padding: 44px 0; border-bottom: 1px solid var(--line); }
+  h2 { font-size: 22px; font-weight: 700; margin-bottom: 20px; letter-spacing: -0.01em; }
+  h2 .bar { display: inline-block; width: 26px; height: 4px; background: var(--accent2); border-radius: 2px; margin-right: 10px; vertical-align: middle; }
+
+  .exp { display: grid; gap: 14px; }
+  .exp-item { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .exp-item .role { font-weight: 700; font-size: 16px; }
+  .exp-item .org { color: var(--accent); font-weight: 600; }
+  .exp-item .when { color: var(--muted); font-size: 13.5px; margin-left: 6px; }
+  .exp-item p { color: var(--muted); font-size: 14.5px; margin-top: 6px; }
+  .exp-item p b { color: var(--ink); }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 32px; } }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 20px; text-decoration: none; color: var(--ink); display: block;
+    transition: all .15s ease;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.06); }
+  .card .tag { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; }
+  .card h3 { font-size: 16.5px; margin: 6px 0 8px; }
+  .card p { font-size: 14px; color: var(--muted); }
+  .card .stack { margin-top: 12px; font-size: 12.5px; color: var(--muted); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+
+  .skills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .skills span {
+    background: var(--card); border: 1px solid var(--line); border-radius: 999px;
+    padding: 6px 14px; font-size: 13.5px; font-weight: 500;
+  }
+
+  footer { padding: 40px 0 64px; color: var(--muted); font-size: 14px; }
+  footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Data Engineering · Business Intelligence · Analytics</div>
+    <h1>Sunmin (Mina) Kim</h1>
+    <p class="tagline">
+      M.S. Applied Data Science student at <strong>USC</strong> (Class of 2028), seeking a
+      <strong>Summer 2027 internship</strong>. I turn messy data into decisions companies can act on —
+      end-to-end pipelines, dashboards, and ML systems that real users depend on.
+    </p>
+    <div class="links">
+      <a class="primary" href="https://github.com/nimnusmik">GitHub</a>
+      <a href="https://www.linkedin.com/in/sunnykimm12/">LinkedIn</a>
+      <a href="mailto:kimsunmin0227@gmail.com">Email</a>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2><span class="bar"></span>Experience Highlights</h2>
+    <div class="exp">
+      <div class="exp-item">
+        <div><span class="role">Data Analytics Lead (Intern)</span> · <span class="org">Semo</span><span class="when">AI agent startup · Sep–Dec 2025</span></div>
+        <p>Designed the GA4 metrics framework for an AI diagnostic platform (12+ KPIs, Looker Studio), built BigQuery reporting that cut reporting time by <b>40%</b>, and ran beta experiments with 50+ users that lifted engagement by <b>18%</b>.</p>
+      </div>
+      <div class="exp-item">
+        <div><span class="role">AX Engineer</span> · <span class="org">Global Vision</span><span class="when">manufacturing · 2026</span></div>
+        <p>Built internal automation end-to-end: real-time data pipelines, AI model serving, and an outbound call management platform (mobile app + live admin dashboard) <b>used daily by sales teams</b>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="bar"></span>Featured Projects</h2>
+    <div class="grid">
+      <a class="card" href="https://github.com/nimnusmik/SeoulMetro-Deficit-Solution">
+        <div class="tag">Public Data · ML</div>
+        <h3>Seoul Metro Deficit Analysis</h3>
+        <p>Clustered stations by revenue-loss patterns on large-scale transit data and proposed a fare policy projected to improve the deficit by 34%.</p>
+        <div class="stack">Python · scikit-learn · K-Means · SQL</div>
+      </a>
+      <a class="card" href="https://github.com/nimnusmik/toss-ad-click-prediction">
+        <div class="tag">Enterprise Data · ML</div>
+        <h3>CTR Prediction — Toss Marketing Data</h3>
+        <p>Click-through-rate prediction competition on real fintech marketing data: feature engineering, gradient boosting, and evaluation at scale.</p>
+        <div class="stack">Python · XGBoost · CatBoost · Pandas</div>
+      </a>
+      <a class="card" href="https://github.com/nimnusmik/mlops-project-mlops-5">
+        <div class="tag">Data Engineering · MLOps</div>
+        <h3>MLOps Movie Recommendation Pipeline</h3>
+        <p>End-to-end recommendation service: scheduled ingestion, experiment tracking, model serving, and a web front — deployed on AWS.</p>
+        <div class="stack">Airflow · Docker · MLflow · FastAPI · AWS</div>
+      </a>
+      <a class="card" href="https://github.com/nimnusmik/OpenDocuments">
+        <div class="tag">AI Engineering · RAG</div>
+        <h3>OpenDocuments — RAG Platform</h3>
+        <p>Self-hosted retrieval-augmented generation platform that unifies organizational documents and answers natural-language queries with AI.</p>
+        <div class="stack">TypeScript · LLM · Vector Search</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="bar"></span>Toolkit</h2>
+    <div class="skills">
+      <span>Python</span><span>SQL</span><span>BigQuery</span><span>GA4</span>
+      <span>Looker Studio</span><span>Airflow</span><span>Docker</span><span>MLflow</span>
+      <span>scikit-learn</span><span>PyTorch</span><span>AWS</span><span>R</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    🏆 Minister of SMEs and Startups Award, Korea (2023) &nbsp;·&nbsp;
+    🎓 B.A. AI Convergence (Business AI), HUFS<br><br>
+    Reach me at <a href="mailto:kimsunmin0227@gmail.com">kimsunmin0227@gmail.com</a> — I reply fast.
+  </div>
+</footer>
+
+</body>
+</html>
