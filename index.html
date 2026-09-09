@@ -77,6 +77,7 @@
   h2 .bar { display: inline-block; width: 26px; height: 4px; background: var(--accent2); border-radius: 2px; margin-right: 10px; vertical-align: middle; transition: width .5s ease; }
   section.visible h2 .bar { width: 48px; }
 
+
   /* ── reveal on scroll ── */
   .reveal { opacity: 0; transform: translateY(26px); transition: opacity .6s ease, transform .6s ease; }
   .reveal.visible { opacity: 1; transform: none; }
@@ -121,6 +122,28 @@
   footer { padding: 44px 0 68px; color: var(--muted); font-size: 14px; }
   footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
 
+
+  /* ── pipeline rail ── */
+  #rail { position: absolute; top: 0; width: 2px; background: var(--line); z-index: 5; }
+  #rail .flow { position: absolute; left: -3px; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent); box-shadow: 0 0 10px rgba(153,0,0,.55); transition: top .1s linear; }
+  #rail .node { position: absolute; left: -5px; width: 12px; height: 12px; border-radius: 50%;
+    background: var(--bg); border: 2px solid var(--line); transition: all .3s ease; }
+  #rail .node.active { border-color: var(--accent); background: var(--accent2); transform: scale(1.15); }
+  @media (max-width: 1099px) { #rail { display: none; } }
+
+  .stage { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px;
+    color: var(--muted); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 8px; }
+  .stage b { color: var(--accent); font-weight: 700; }
+
+  .output-block { font-family: ui-monospace, "SF Mono", Menlo, monospace; background: var(--ink);
+    color: #e8e6e1; border-radius: 12px; padding: 22px 26px; font-size: 14.5px; line-height: 2; }
+  .output-block .p { color: #8f8f96; }
+  .output-block .ok { color: #4ade80; font-weight: 700; }
+  .output-block .gold { color: var(--accent2); }
+  .output-block a { color: var(--accent2); text-decoration: none; font-weight: 700; }
+  .output-block a:hover { text-decoration: underline; }
+
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .reveal, .stagger > * { opacity: 1 !important; transform: none !important; transition: none !important; }
@@ -132,6 +155,7 @@
 <body>
 
 <div id="progress"></div>
+<div id="rail"><div class="flow"></div></div>
 
 <div id="mininav">
   <div class="inner">
@@ -166,6 +190,7 @@
 
 <section id="experience" class="reveal">
   <div class="wrap">
+    <div class="stage">── stage 01 · <b>INGEST</b> — where I worked with raw data</div>
     <h2><span class="bar"></span>Experience Highlights</h2>
     <div class="exp stagger">
       <div class="exp-item">
@@ -182,6 +207,7 @@
 
 <section id="projects" class="reveal">
   <div class="wrap">
+    <div class="stage">── stage 02 · <b>TRANSFORM</b> — what I built from it</div>
     <h2><span class="bar"></span>Featured Projects</h2>
     <div class="grid stagger">
       <a class="card" href="https://github.com/nimnusmik/SeoulMetro-Deficit-Solution">
@@ -218,6 +244,7 @@
 
 <section id="toolkit" class="reveal">
   <div class="wrap">
+    <div class="stage">── stage 03 · <b>SERVE</b> — the tools I ship with</div>
     <h2><span class="bar"></span>Toolkit</h2>
     <div class="skills">
       <span>Python</span><span>SQL</span><span>BigQuery</span><span>GA4</span>
@@ -227,11 +254,18 @@
   </div>
 </section>
 
-<footer class="reveal">
+<footer class="reveal" id="output">
   <div class="wrap">
-    🏆 Minister of SMEs and Startups Award, Korea (2023) &nbsp;·&nbsp;
-    🎓 B.A. AI Convergence (Business AI), HUFS<br><br>
-    Reach me at <a href="mailto:kimsunmin0227@gmail.com">kimsunmin0227@gmail.com</a> — I reply fast.
+    <div class="stage">── final stage · <b>OUTPUT</b></div>
+    <div class="output-block">
+      <span class="p">$</span> pipeline run --candidate sunmin_kim<br>
+      <span class="p">[1/3]</span> ingest &nbsp;····· <span class="ok">done</span> <span class="p">(Semo · Global Vision)</span><br>
+      <span class="p">[2/3]</span> transform ·· <span class="ok">done</span> <span class="p">(6 shipped projects)</span><br>
+      <span class="p">[3/3]</span> serve &nbsp;······ <span class="ok">done</span> <span class="p">(USC ADS · Summer 2027 ready)</span><br>
+      <span class="gold">▶ output:</span> decisions <span class="ok">✓</span> — let's build some together.<br>
+      <span class="gold">▶ contact:</span> <a href="mailto:kimsunmin0227@gmail.com">kimsunmin0227@gmail.com</a> <span class="p">// I reply fast</span>
+    </div>
+    <p style="margin-top:18px">🏆 Minister of SMEs and Startups Award, Korea (2023) &nbsp;·&nbsp; 🎓 B.A. AI Convergence (Business AI), HUFS</p>
   </div>
 </footer>
 
@@ -247,6 +281,42 @@
     progress.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
     mininav.classList.toggle('show', h.scrollTop > 320);
   }, { passive: true });
+
+
+  /* ── pipeline rail: nodes per section + flowing dot ── */
+  const rail = document.getElementById('rail');
+  const railSections = ['experience', 'projects', 'toolkit', 'output'].map(id => document.getElementById(id));
+  function layoutRail() {
+    if (innerWidth < 1100) return;
+    const wrap = document.querySelector('header .wrap');
+    const left = wrap.getBoundingClientRect().left - 36;
+    const docH = document.documentElement.scrollHeight;
+    rail.style.left = left + 'px';
+    rail.style.height = docH + 'px';
+    rail.querySelectorAll('.node').forEach(n => n.remove());
+    railSections.forEach(sec => {
+      if (!sec) return;
+      const n = document.createElement('div');
+      n.className = 'node';
+      n.dataset.for = sec.id;
+      n.style.top = (sec.offsetTop + 58) + 'px';
+      rail.appendChild(n);
+    });
+  }
+  layoutRail();
+  addEventListener('resize', layoutRail);
+  addEventListener('load', layoutRail);
+  const flowDot = rail.querySelector('.flow');
+  addEventListener('scroll', () => {
+    if (innerWidth < 1100) return;
+    const y = scrollY + innerHeight * 0.38;
+    flowDot.style.top = y + 'px';
+    rail.querySelectorAll('.node').forEach(n => {
+      n.classList.toggle('active', y >= parseFloat(n.style.top));
+    });
+  }, { passive: true });
+
+
 
   /* ── reveal on scroll ── */
   const io = new IntersectionObserver(entries => {
