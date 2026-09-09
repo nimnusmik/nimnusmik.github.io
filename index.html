@@ -16,6 +16,7 @@
     --line: #e8e6e1;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background: var(--bg); color: var(--ink); line-height: 1.6;
@@ -23,66 +24,136 @@
   }
   .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; }
 
-  header { padding: 72px 0 48px; border-bottom: 1px solid var(--line); }
+  /* ── scroll progress bar ── */
+  #progress {
+    position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    z-index: 100; transition: width .08s linear;
+  }
+
+  /* ── sticky mini nav ── */
+  #mininav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 90;
+    background: rgba(250,250,248,.86); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    transform: translateY(-100%); transition: transform .3s ease;
+  }
+  #mininav.show { transform: translateY(0); }
+  #mininav .inner {
+    max-width: 860px; margin: 0 auto; padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  #mininav .name { font-weight: 800; font-size: 15px; }
+  #mininav .name span { color: var(--accent); }
+  #mininav nav { display: flex; gap: 18px; }
+  #mininav nav a { text-decoration: none; color: var(--muted); font-size: 13.5px; font-weight: 600; }
+  #mininav nav a:hover { color: var(--accent); }
+  @media (max-width: 640px) { #mininav nav a:not(.cta) { display: none; } }
+  #mininav nav a.cta { color: var(--accent); }
+
+  /* ── hero ── */
+  header { position: relative; padding: 88px 0 64px; border-bottom: 1px solid var(--line); overflow: hidden; }
+  #dots { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .55; }
+  header .wrap { position: relative; }
   .eyebrow { color: var(--accent); font-weight: 600; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 12px; }
-  h1 { font-size: 42px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; }
-  .tagline { font-size: 19px; color: var(--muted); max-width: 620px; margin-bottom: 24px; }
+  h1 { font-size: 44px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; }
+  .tagline { font-size: 19px; color: var(--muted); max-width: 620px; margin-bottom: 26px; }
   .tagline strong { color: var(--ink); }
+  .typed { border-right: 2px solid var(--accent); padding-right: 3px; color: var(--ink); font-weight: 600; }
   .links { display: flex; gap: 12px; flex-wrap: wrap; }
   .links a {
     display: inline-block; padding: 9px 18px; border-radius: 8px; text-decoration: none;
     font-weight: 600; font-size: 14.5px; border: 1.5px solid var(--line); color: var(--ink);
-    transition: all .15s ease;
+    background: rgba(255,255,255,.7); transition: all .15s ease;
   }
   .links a.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .links a:hover { border-color: var(--accent); color: var(--accent); }
+  .links a:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
   .links a.primary:hover { background: #7a0000; color: #fff; }
+  .scroll-hint { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); color: var(--muted); font-size: 20px; animation: bob 1.6s ease-in-out infinite; }
+  @keyframes bob { 0%,100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 6px); } }
 
-  section { padding: 44px 0; border-bottom: 1px solid var(--line); }
-  h2 { font-size: 22px; font-weight: 700; margin-bottom: 20px; letter-spacing: -0.01em; }
-  h2 .bar { display: inline-block; width: 26px; height: 4px; background: var(--accent2); border-radius: 2px; margin-right: 10px; vertical-align: middle; }
+  section { padding: 52px 0; border-bottom: 1px solid var(--line); }
+  h2 { font-size: 22px; font-weight: 700; margin-bottom: 22px; letter-spacing: -0.01em; }
+  h2 .bar { display: inline-block; width: 26px; height: 4px; background: var(--accent2); border-radius: 2px; margin-right: 10px; vertical-align: middle; transition: width .5s ease; }
+  section.visible h2 .bar { width: 48px; }
+
+  /* ── reveal on scroll ── */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+  .stagger > * { opacity: 0; transform: translateY(22px); transition: opacity .55s ease, transform .55s ease; }
+  .stagger.visible > *:nth-child(1) { transition-delay: .05s; }
+  .stagger.visible > *:nth-child(2) { transition-delay: .15s; }
+  .stagger.visible > *:nth-child(3) { transition-delay: .25s; }
+  .stagger.visible > *:nth-child(4) { transition-delay: .35s; }
+  .stagger.visible > * { opacity: 1; transform: none; }
 
   .exp { display: grid; gap: 14px; }
-  .exp-item { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .exp-item { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 12px; padding: 18px 20px; }
   .exp-item .role { font-weight: 700; font-size: 16px; }
   .exp-item .org { color: var(--accent); font-weight: 600; }
   .exp-item .when { color: var(--muted); font-size: 13.5px; margin-left: 6px; }
   .exp-item p { color: var(--muted); font-size: 14.5px; margin-top: 6px; }
   .exp-item p b { color: var(--ink); }
+  .metric { color: var(--accent); font-weight: 800; font-variant-numeric: tabular-nums; }
 
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 32px; } }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 33px; } }
   .card {
     background: var(--card); border: 1px solid var(--line); border-radius: 12px;
     padding: 20px; text-decoration: none; color: var(--ink); display: block;
-    transition: all .15s ease;
+    transition: border-color .15s ease, box-shadow .2s ease; will-change: transform;
   }
-  .card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.06); }
+  .card:hover { border-color: var(--accent); box-shadow: 0 10px 26px rgba(0,0,0,.08); }
   .card .tag { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; }
   .card h3 { font-size: 16.5px; margin: 6px 0 8px; }
   .card p { font-size: 14px; color: var(--muted); }
   .card .stack { margin-top: 12px; font-size: 12.5px; color: var(--muted); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .card .arrow { float: right; color: var(--accent); opacity: 0; transform: translateX(-6px); transition: all .2s ease; }
+  .card:hover .arrow { opacity: 1; transform: none; }
 
   .skills { display: flex; flex-wrap: wrap; gap: 8px; }
   .skills span {
     background: var(--card); border: 1px solid var(--line); border-radius: 999px;
-    padding: 6px 14px; font-size: 13.5px; font-weight: 500;
+    padding: 6px 14px; font-size: 13.5px; font-weight: 500; transition: all .15s ease; cursor: default;
   }
+  .skills span:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
-  footer { padding: 40px 0 64px; color: var(--muted); font-size: 14px; }
+  footer { padding: 44px 0 68px; color: var(--muted); font-size: 14px; }
   footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal, .stagger > * { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .scroll-hint, .typed { animation: none; }
+    #dots { display: none; }
+  }
 </style>
 </head>
 <body>
 
+<div id="progress"></div>
+
+<div id="mininav">
+  <div class="inner">
+    <div class="name">Sunmin<span>.</span>Kim</div>
+    <nav>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#toolkit">Toolkit</a>
+      <a class="cta" href="mailto:kimsunmin0227@gmail.com">Contact ↗</a>
+    </nav>
+  </div>
+</div>
+
 <header>
+  <canvas id="dots"></canvas>
   <div class="wrap">
     <div class="eyebrow">Data Engineering · Business Intelligence · Analytics</div>
     <h1>Sunmin (Mina) Kim</h1>
     <p class="tagline">
       M.S. Applied Data Science student at <strong>USC</strong> (Class of 2028), seeking a
-      <strong>Summer 2027 internship</strong>. I turn messy data into decisions companies can act on —
-      end-to-end pipelines, dashboards, and ML systems that real users depend on.
+      <strong>Summer 2027 internship</strong>. I turn <span class="typed" id="typed">messy data</span><br>
+      into decisions companies can act on.
     </p>
     <div class="links">
       <a class="primary" href="https://github.com/nimnusmik">GitHub</a>
@@ -90,47 +161,52 @@
       <a href="mailto:kimsunmin0227@gmail.com">Email</a>
     </div>
   </div>
+  <div class="scroll-hint">▾</div>
 </header>
 
-<section>
+<section id="experience" class="reveal">
   <div class="wrap">
     <h2><span class="bar"></span>Experience Highlights</h2>
-    <div class="exp">
+    <div class="exp stagger">
       <div class="exp-item">
         <div><span class="role">AX Engineer</span> · <span class="org">Global Vision</span><span class="when">manufacturing · 2026</span></div>
         <p>Built internal automation end-to-end: real-time data pipelines, AI model serving, and an outbound call management platform (mobile app + live admin dashboard) <b>used daily by sales teams</b>.</p>
       </div>
       <div class="exp-item">
         <div><span class="role">Data Analytics Lead (Intern)</span> · <span class="org">Semo</span><span class="when">AI agent startup · Sep–Dec 2025</span></div>
-        <p>Designed the GA4 metrics framework for an AI diagnostic platform (12+ KPIs, Looker Studio), built BigQuery reporting that cut reporting time by <b>40%</b>, and ran beta experiments with 50+ users that lifted engagement by <b>18%</b>.</p>
+        <p>Designed the GA4 metrics framework for an AI diagnostic platform (12+ KPIs, Looker Studio), built BigQuery reporting that cut reporting time by <b class="metric" data-count="40">40</b><b class="metric">%</b>, and ran beta experiments with 50+ users that lifted engagement by <b class="metric" data-count="18">18</b><b class="metric">%</b>.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section>
+<section id="projects" class="reveal">
   <div class="wrap">
     <h2><span class="bar"></span>Featured Projects</h2>
-    <div class="grid">
+    <div class="grid stagger">
       <a class="card" href="https://github.com/nimnusmik/SeoulMetro-Deficit-Solution">
+        <span class="arrow">→</span>
         <div class="tag">Public Data · ML</div>
         <h3>Seoul Metro Deficit Analysis</h3>
-        <p>Clustered stations by revenue-loss patterns on large-scale transit data and proposed a fare policy projected to improve the deficit by 34%.</p>
+        <p>Clustered stations by revenue-loss patterns on large-scale transit data and proposed a fare policy projected to improve the deficit by <b class="metric" data-count="34">34</b><b class="metric">%</b>.</p>
         <div class="stack">Python · scikit-learn · K-Means · SQL</div>
       </a>
       <a class="card" href="https://github.com/nimnusmik/toss-ad-click-prediction">
+        <span class="arrow">→</span>
         <div class="tag">Enterprise Data · ML</div>
         <h3>CTR Prediction — Toss Marketing Data</h3>
         <p>Click-through-rate prediction competition on real fintech marketing data: feature engineering, gradient boosting, and evaluation at scale.</p>
         <div class="stack">Python · XGBoost · CatBoost · Pandas</div>
       </a>
       <a class="card" href="https://github.com/nimnusmik/mlops-project-mlops-5">
+        <span class="arrow">→</span>
         <div class="tag">Data Engineering · MLOps</div>
         <h3>MLOps Movie Recommendation Pipeline</h3>
         <p>End-to-end recommendation service: scheduled ingestion, experiment tracking, model serving, and a web front — deployed on AWS.</p>
         <div class="stack">Airflow · Docker · MLflow · FastAPI · AWS</div>
       </a>
       <a class="card" href="https://github.com/nimnusmik/OpenDocuments">
+        <span class="arrow">→</span>
         <div class="tag">AI Engineering · RAG</div>
         <h3>OpenDocuments — RAG Platform</h3>
         <p>Self-hosted retrieval-augmented generation platform that unifies organizational documents and answers natural-language queries with AI.</p>
@@ -140,7 +216,7 @@
   </div>
 </section>
 
-<section>
+<section id="toolkit" class="reveal">
   <div class="wrap">
     <h2><span class="bar"></span>Toolkit</h2>
     <div class="skills">
@@ -151,7 +227,7 @@
   </div>
 </section>
 
-<footer>
+<footer class="reveal">
   <div class="wrap">
     🏆 Minister of SMEs and Startups Award, Korea (2023) &nbsp;·&nbsp;
     🎓 B.A. AI Convergence (Business AI), HUFS<br><br>
@@ -159,5 +235,134 @@
   </div>
 </footer>
 
+<script>
+(function () {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── scroll progress + mini nav ── */
+  const progress = document.getElementById('progress');
+  const mininav = document.getElementById('mininav');
+  addEventListener('scroll', () => {
+    const h = document.documentElement;
+    progress.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+    mininav.classList.toggle('show', h.scrollTop > 320);
+  }, { passive: true });
+
+  /* ── reveal on scroll ── */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('visible');
+      e.target.querySelectorAll('.stagger').forEach(s => s.classList.add('visible'));
+      countUp(e.target);
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.18 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ── metric count-up ── */
+  function countUp(scope) {
+    if (reduced) return;
+    scope.querySelectorAll('[data-count]').forEach(el => {
+      const target = +el.dataset.count, dur = 900, t0 = performance.now();
+      (function tick(t) {
+        const p = Math.min((t - t0) / dur, 1);
+        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) requestAnimationFrame(tick);
+      })(t0);
+    });
+  }
+
+  /* ── typed rotator in hero ── */
+  const words = ['messy data', 'raw events', 'scattered logs', 'messy data'];
+  const typed = document.getElementById('typed');
+  if (!reduced && typed) {
+    let wi = 0;
+    function typeWord(word, cb) {
+      let i = 0;
+      (function step() {
+        typed.textContent = word.slice(0, ++i);
+        if (i < word.length) setTimeout(step, 70); else cb();
+      })();
+    }
+    function eraseWord(cb) {
+      (function step() {
+        const cur = typed.textContent;
+        typed.textContent = cur.slice(0, -1);
+        if (typed.textContent) setTimeout(step, 40); else cb();
+      })();
+    }
+    (function loop() {
+      setTimeout(() => {
+        if (wi >= words.length - 1) return; // end on "messy data"
+        eraseWord(() => typeWord(words[++wi], loop));
+      }, 2100);
+    })();
+  }
+
+  /* ── card tilt ── */
+  if (!reduced && matchMedia('(hover: hover)').matches) {
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - .5;
+        const y = (e.clientY - r.top) / r.height - .5;
+        card.style.transform = `perspective(700px) rotateY(${x * 5}deg) rotateX(${y * -5}deg) translateY(-2px)`;
+      });
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    });
+  }
+
+  /* ── hero: messy dots organize into an ascending trend line ── */
+  const canvas = document.getElementById('dots');
+  if (canvas && !reduced) {
+    const ctx = canvas.getContext('2d');
+    let W, H, pts = [], t0 = performance.now();
+    const N = 46;
+    function resize() {
+      W = canvas.width = canvas.offsetWidth * devicePixelRatio;
+      H = canvas.height = canvas.offsetHeight * devicePixelRatio;
+      pts = Array.from({ length: N }, (_, i) => {
+        const fx = (0.06 + 0.88 * i / (N - 1)) * W;                       // target: even spread
+        const fy = H * (0.86 - 0.62 * (i / (N - 1)))                      // ascending line
+                 + Math.sin(i * 1.7) * H * 0.05;                          // slight waviness
+        return {
+          x: Math.random() * W, y: Math.random() * H,                     // start: scattered
+          fx, fy, phase: Math.random() * Math.PI * 2,
+        };
+      });
+    }
+    resize(); addEventListener('resize', resize);
+    (function draw(now) {
+      const p = Math.min((now - t0) / 3800, 1);                           // organize over ~4s
+      const ease = 1 - Math.pow(1 - p, 3);
+      ctx.clearRect(0, 0, W, H);
+      // connecting line appears as points settle
+      if (p > 0.55) {
+        ctx.globalAlpha = (p - 0.55) / 0.45 * 0.5;
+        ctx.strokeStyle = '#990000'; ctx.lineWidth = 1.4 * devicePixelRatio;
+        ctx.beginPath();
+        pts.forEach((pt, i) => {
+          const x = pt.x + (pt.fx - pt.x) * ease;
+          const y = pt.y + (pt.fy - pt.y) * ease + Math.sin(now / 900 + pt.phase) * 2 * devicePixelRatio;
+          i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+        });
+        ctx.stroke();
+      }
+      pts.forEach((pt, i) => {
+        const x = pt.x + (pt.fx - pt.x) * ease;
+        const y = pt.y + (pt.fy - pt.y) * ease + Math.sin(now / 900 + pt.phase) * 2 * devicePixelRatio;
+        ctx.globalAlpha = 0.25 + 0.5 * ease;
+        ctx.fillStyle = i % 6 === 0 ? '#ffcc00' : '#990000';
+        ctx.beginPath();
+        ctx.arc(x, y, (i % 6 === 0 ? 2.6 : 1.8) * devicePixelRatio, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(draw);
+    })(t0);
+  }
+})();
+</script>
 </body>
 </html>
