@@ -25,7 +25,7 @@
   }
   #stage { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
   .content { position: relative; z-index: 1; }
-  .wrap { max-width: 780px; margin: 0 auto; padding: 0 24px; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
 
   #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0%;
     background: linear-gradient(90deg, var(--accent), var(--gold)); z-index: 100; }
@@ -35,7 +35,7 @@
     border-bottom: 1px solid var(--line);
     transform: translateY(-100%); transition: transform .3s ease; }
   #mininav.show { transform: translateY(0); }
-  #mininav .inner { max-width: 780px; margin: 0 auto; padding: 12px 24px;
+  #mininav .inner { max-width: 960px; margin: 0 auto; padding: 12px 24px;
     display: flex; align-items: center; justify-content: space-between; }
   #mininav .name { font-weight: 800; font-size: 15px; }
   #mininav .name span { color: var(--accent); }
@@ -150,6 +150,7 @@
     <nav>
       <a href="#semo">Experience</a>
       <a href="#projects">Projects</a>
+      <a href="#side">Side</a>
       <a href="#now">Now</a>
       <a class="cta" href="mailto:kimsunmin0227@gmail.com">Contact ↗</a>
     </nav>
@@ -238,6 +239,17 @@
           <p>Self-hosted RAG platform unifying organizational documents, answering natural-language queries with AI.</p>
           <div class="stack">TypeScript · LLM · Vector Search</div>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 3.5 · SIDE PROJECTS -->
+  <section class="scene reveal" id="side">
+    <div class="scene-inner wrap">
+      <div class="chapter">chapter 04 · the point plays after hours</div>
+      <h2>Off the clock, it still ships.</h2>
+      <p class="body">Things I build for fun — live, real users, zero deadlines.</p>
+      <div class="grid stagger">
         <a class="card" href="https://nailspo.vercel.app">
           <span class="arrow">→</span>
           <div class="tag">Live Product · Gen AI</div>
@@ -259,7 +271,7 @@
   <!-- SCENE 4 · NOW -->
   <section class="scene reveal" id="now">
     <div class="scene-inner wrap">
-      <div class="chapter">chapter 04 · the point is now at usc</div>
+      <div class="chapter">chapter 05 · the point is now at usc</div>
       <h2>Sharpening the toolkit.</h2>
       <p class="body">M.S. in <b>Applied Data Science at USC</b> (2026–2028) — data infrastructure, large-scale ML,
         and everything in between. 🏆 Minister of SMEs and Startups Award, Korea (2023) ·
