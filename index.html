@@ -3,322 +3,309 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sunmin Kim — Data Engineering & Analytics</title>
+<title>Sunmin Kim — Follow the Data</title>
 <meta name="description" content="Sunmin (Mina) Kim — M.S. Applied Data Science student at USC. Data engineering, BI, and analytics portfolio.">
 <style>
   :root {
-    --bg: #fafaf8;
-    --card: #ffffff;
-    --ink: #1c1c1e;
-    --muted: #6b6b70;
-    --accent: #990000;   /* USC cardinal */
-    --accent2: #ffcc00;  /* USC gold */
-    --line: #e8e6e1;
+    --bg: #0c0c10;
+    --panel: #14141a;
+    --ink: #ececf0;
+    --muted: #9a9aa4;
+    --accent: #ff4444;
+    --accent-deep: #990000;
+    --gold: #ffcc00;
+    --line: #26262e;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background: var(--bg); color: var(--ink); line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
+    background: var(--bg); color: var(--ink); line-height: 1.65;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
   }
-  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+  #stage { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .content { position: relative; z-index: 1; }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 0 24px; }
 
-  /* ── scroll progress bar ── */
-  #progress {
-    position: fixed; top: 0; left: 0; height: 3px; width: 0%;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    z-index: 100; transition: width .08s linear;
-  }
+  #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--gold)); z-index: 100; }
 
-  /* ── sticky mini nav ── */
-  #mininav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 90;
-    background: rgba(250,250,248,.86); backdrop-filter: blur(12px);
+  #mininav { position: fixed; top: 0; left: 0; right: 0; z-index: 90;
+    background: rgba(12,12,16,.7); backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--line);
-    transform: translateY(-100%); transition: transform .3s ease;
-  }
+    transform: translateY(-100%); transition: transform .3s ease; }
   #mininav.show { transform: translateY(0); }
-  #mininav .inner {
-    max-width: 860px; margin: 0 auto; padding: 12px 24px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
+  #mininav .inner { max-width: 780px; margin: 0 auto; padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between; }
   #mininav .name { font-weight: 800; font-size: 15px; }
   #mininav .name span { color: var(--accent); }
   #mininav nav { display: flex; gap: 18px; }
   #mininav nav a { text-decoration: none; color: var(--muted); font-size: 13.5px; font-weight: 600; }
-  #mininav nav a:hover { color: var(--accent); }
+  #mininav nav a:hover, #mininav nav a.cta { color: var(--gold); }
   @media (max-width: 640px) { #mininav nav a:not(.cta) { display: none; } }
-  #mininav nav a.cta { color: var(--accent); }
 
-  /* ── hero ── */
-  header { position: relative; padding: 88px 0 64px; border-bottom: 1px solid var(--line); overflow: hidden; }
-  #dots { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .55; }
-  header .wrap { position: relative; }
-  .eyebrow { color: var(--accent); font-weight: 600; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 12px; }
-  h1 { font-size: 44px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; }
-  .tagline { font-size: 19px; color: var(--muted); max-width: 620px; margin-bottom: 26px; }
-  .tagline strong { color: var(--ink); }
-  .typed { border-right: 2px solid var(--accent); padding-right: 3px; color: var(--ink); font-weight: 600; }
+  .chapter { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px;
+    color: var(--gold); letter-spacing: .18em; text-transform: uppercase; margin-bottom: 14px; }
+  .chapter::before { content: "── "; color: var(--muted); }
+
+  /* ── scenes ── */
+  .scene { min-height: 92vh; display: flex; align-items: center; padding: 12vh 0; }
+  .scene-inner { width: 100%; }
+
+  /* hero */
+  #hero { min-height: 100vh; }
+  .eyebrow { color: var(--accent); font-weight: 700; font-size: 13.5px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 14px; }
+  h1 { font-size: 52px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.12; margin-bottom: 18px; }
+  h1 .dim { color: var(--muted); font-weight: 600; }
+  .lede { font-size: 19px; color: var(--muted); max-width: 560px; margin-bottom: 30px; }
+  .lede strong { color: var(--ink); }
   .links { display: flex; gap: 12px; flex-wrap: wrap; }
-  .links a {
-    display: inline-block; padding: 9px 18px; border-radius: 8px; text-decoration: none;
-    font-weight: 600; font-size: 14.5px; border: 1.5px solid var(--line); color: var(--ink);
-    background: rgba(255,255,255,.7); transition: all .15s ease;
-  }
-  .links a.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .links a { display: inline-block; padding: 10px 20px; border-radius: 10px; text-decoration: none;
+    font-weight: 700; font-size: 14.5px; border: 1.5px solid var(--line); color: var(--ink);
+    background: rgba(20,20,26,.6); transition: all .15s ease; }
+  .links a.primary { background: var(--accent-deep); border-color: var(--accent-deep); color: #fff; }
   .links a:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
-  .links a.primary:hover { background: #7a0000; color: #fff; }
-  .scroll-hint { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); color: var(--muted); font-size: 20px; animation: bob 1.6s ease-in-out infinite; }
-  @keyframes bob { 0%,100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 6px); } }
+  .links a.primary:hover { background: #b30000; color: #fff; }
+  .scroll-hint { margin-top: 56px; color: var(--muted); font-size: 13.5px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: .5; } 50% { opacity: 1; } }
 
-  section { padding: 52px 0; border-bottom: 1px solid var(--line); }
-  h2 { font-size: 22px; font-weight: 700; margin-bottom: 22px; letter-spacing: -0.01em; }
-  h2 .bar { display: inline-block; width: 26px; height: 4px; background: var(--accent2); border-radius: 2px; margin-right: 10px; vertical-align: middle; transition: width .5s ease; }
-  section.visible h2 .bar { width: 48px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -0.01em; margin-bottom: 16px; }
+  .scene p.body { color: var(--muted); font-size: 16.5px; max-width: 600px; }
+  .scene p.body b { color: var(--ink); }
 
+  /* metric billboard */
+  .metrics { display: flex; gap: 28px; margin: 30px 0 8px; flex-wrap: wrap; }
+  .metric-big { font-variant-numeric: tabular-nums; }
+  .metric-big .num { font-size: 58px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .metric-big .num .sign { color: var(--gold); }
+  .metric-big .lbl { color: var(--muted); font-size: 13.5px; margin-top: 6px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; }
 
-  /* ── reveal on scroll ── */
-  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .6s ease, transform .6s ease; }
+  .org-chip { display: inline-block; font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 12.5px; color: var(--gold); border: 1px solid var(--line); border-radius: 999px;
+    padding: 4px 12px; margin-bottom: 16px; background: rgba(20,20,26,.6); }
+
+  /* project cards */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 28px; }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 36px; } .metric-big .num { font-size: 44px; } }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 20px; text-decoration: none; color: var(--ink); display: block;
+    transition: border-color .15s ease, box-shadow .2s ease, transform .15s ease; }
+  .card:hover { border-color: var(--accent); transform: translateY(-3px);
+    box-shadow: 0 12px 34px rgba(255,68,68,.12); }
+  .card .tag { font-size: 11.5px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: .07em; }
+  .card h3 { font-size: 16.5px; margin: 7px 0 8px; }
+  .card p { font-size: 13.8px; color: var(--muted); }
+  .card .stack { margin-top: 12px; font-size: 12px; color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .card .arrow { float: right; color: var(--accent); opacity: 0; transform: translateX(-6px); transition: all .2s ease; }
+  .card:hover .arrow { opacity: 1; transform: none; }
+
+  .skills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+  .skills span { background: var(--panel); border: 1px solid var(--line); border-radius: 999px;
+    padding: 6px 14px; font-size: 13px; font-weight: 500; color: var(--muted); transition: all .15s ease; cursor: default; }
+  .skills span:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+  /* finale */
+  #finale { min-height: 100vh; text-align: center; }
+  #finale .word { font-size: clamp(56px, 11vw, 120px); font-weight: 800; letter-spacing: -0.03em;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    opacity: 0; transform: scale(.92); transition: opacity .9s ease, transform .9s ease; }
+  #finale.visible .word { opacity: 1; transform: none; }
+  #finale .sub { color: var(--muted); margin: 18px 0 30px; font-size: 17px; }
+  #finale .links { justify-content: center; }
+  #finale .meta { margin-top: 54px; color: var(--muted); font-size: 13.5px; }
+  #finale .meta a { color: var(--gold); text-decoration: none; font-weight: 600; }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s ease; }
   .reveal.visible { opacity: 1; transform: none; }
-  .stagger > * { opacity: 0; transform: translateY(22px); transition: opacity .55s ease, transform .55s ease; }
+  .stagger > * { opacity: 0; transform: translateY(24px); transition: opacity .55s ease, transform .55s ease; }
   .stagger.visible > *:nth-child(1) { transition-delay: .05s; }
   .stagger.visible > *:nth-child(2) { transition-delay: .15s; }
   .stagger.visible > *:nth-child(3) { transition-delay: .25s; }
   .stagger.visible > *:nth-child(4) { transition-delay: .35s; }
+  .stagger.visible > *:nth-child(5) { transition-delay: .45s; }
+  .stagger.visible > *:nth-child(6) { transition-delay: .55s; }
   .stagger.visible > * { opacity: 1; transform: none; }
-
-  .exp { display: grid; gap: 14px; }
-  .exp-item { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 12px; padding: 18px 20px; }
-  .exp-item .role { font-weight: 700; font-size: 16px; }
-  .exp-item .org { color: var(--accent); font-weight: 600; }
-  .exp-item .when { color: var(--muted); font-size: 13.5px; margin-left: 6px; }
-  .exp-item p { color: var(--muted); font-size: 14.5px; margin-top: 6px; }
-  .exp-item p b { color: var(--ink); }
-  .metric { color: var(--accent); font-weight: 800; font-variant-numeric: tabular-nums; }
-
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 33px; } }
-  .card {
-    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
-    padding: 20px; text-decoration: none; color: var(--ink); display: block;
-    transition: border-color .15s ease, box-shadow .2s ease; will-change: transform;
-  }
-  .card:hover { border-color: var(--accent); box-shadow: 0 10px 26px rgba(0,0,0,.08); }
-  .card .tag { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; }
-  .card h3 { font-size: 16.5px; margin: 6px 0 8px; }
-  .card p { font-size: 14px; color: var(--muted); }
-  .card .stack { margin-top: 12px; font-size: 12.5px; color: var(--muted); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
-  .card .arrow { float: right; color: var(--accent); opacity: 0; transform: translateX(-6px); transition: all .2s ease; }
-  .card:hover .arrow { opacity: 1; transform: none; }
-
-  .skills { display: flex; flex-wrap: wrap; gap: 8px; }
-  .skills span {
-    background: var(--card); border: 1px solid var(--line); border-radius: 999px;
-    padding: 6px 14px; font-size: 13.5px; font-weight: 500; transition: all .15s ease; cursor: default;
-  }
-  .skills span:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
-
-  footer { padding: 44px 0 68px; color: var(--muted); font-size: 14px; }
-  footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
-
-
-  /* ── pipeline rail ── */
-  #rail { position: absolute; top: 0; width: 2px; background: var(--line); z-index: 5; }
-  #rail .flow { position: absolute; left: -3px; width: 8px; height: 8px; border-radius: 50%;
-    background: var(--accent); box-shadow: 0 0 10px rgba(153,0,0,.55); transition: top .1s linear; }
-  #rail .node { position: absolute; left: -5px; width: 12px; height: 12px; border-radius: 50%;
-    background: var(--bg); border: 2px solid var(--line); transition: all .3s ease; }
-  #rail .node.active { border-color: var(--accent); background: var(--accent2); transform: scale(1.15); }
-  @media (max-width: 1099px) { #rail { display: none; } }
-
-  .stage { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px;
-    color: var(--muted); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 8px; }
-  .stage b { color: var(--accent); font-weight: 700; }
-
-  .output-block { font-family: ui-monospace, "SF Mono", Menlo, monospace; background: var(--ink);
-    color: #e8e6e1; border-radius: 12px; padding: 22px 26px; font-size: 14.5px; line-height: 2; }
-  .output-block .p { color: #8f8f96; }
-  .output-block .ok { color: #4ade80; font-weight: 700; }
-  .output-block .gold { color: var(--accent2); }
-  .output-block a { color: var(--accent2); text-decoration: none; font-weight: 700; }
-  .output-block a:hover { text-decoration: underline; }
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    .reveal, .stagger > * { opacity: 1 !important; transform: none !important; transition: none !important; }
-    .scroll-hint, .typed { animation: none; }
-    #dots { display: none; }
+    #stage { display: none; }
+    .reveal, .stagger > *, #finale .word { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .scroll-hint { animation: none; }
+    body { background: #101014; }
   }
 </style>
 </head>
 <body>
 
+<canvas id="stage"></canvas>
 <div id="progress"></div>
-<div id="rail"><div class="flow"></div></div>
 
 <div id="mininav">
   <div class="inner">
     <div class="name">Sunmin<span>.</span>Kim</div>
     <nav>
-      <a href="#experience">Experience</a>
+      <a href="#semo">Experience</a>
       <a href="#projects">Projects</a>
-      <a href="#toolkit">Toolkit</a>
+      <a href="#now">Now</a>
       <a class="cta" href="mailto:kimsunmin0227@gmail.com">Contact ↗</a>
     </nav>
   </div>
 </div>
 
-<header>
-  <canvas id="dots"></canvas>
-  <div class="wrap">
-    <div class="eyebrow">Data Engineering · Business Intelligence · Analytics</div>
-    <h1>Sunmin (Mina) Kim</h1>
-    <p class="tagline">
-      M.S. Applied Data Science student at <strong>USC</strong> (Class of 2028), seeking a
-      <strong>Summer 2027 internship</strong>. I turn <span class="typed" id="typed">messy data</span><br>
-      into decisions companies can act on.
-    </p>
-    <div class="links">
-      <a class="primary" href="https://github.com/nimnusmik">GitHub</a>
-      <a href="https://www.linkedin.com/in/sunnykimm12/">LinkedIn</a>
-      <a href="mailto:kimsunmin0227@gmail.com">Email</a>
-    </div>
-  </div>
-  <div class="scroll-hint">▾</div>
-</header>
+<div class="content">
 
-<section id="experience" class="reveal">
-  <div class="wrap">
-    <div class="stage">── stage 01 · <b>INGEST</b> — where I worked with raw data</div>
-    <h2><span class="bar"></span>Experience Highlights</h2>
-    <div class="exp stagger">
-      <div class="exp-item">
-        <div><span class="role">AX Engineer</span> · <span class="org">Global Vision</span><span class="when">manufacturing · 2026</span></div>
-        <p>Built internal automation end-to-end: real-time data pipelines, AI model serving, and an outbound call management platform (mobile app + live admin dashboard) <b>used daily by sales teams</b>.</p>
+  <!-- SCENE 0 · HERO -->
+  <section class="scene" id="hero">
+    <div class="scene-inner wrap">
+      <div class="eyebrow">Data Engineering · Business Intelligence · Analytics</div>
+      <h1>Every decision starts<br>as a single data point.<br><span class="dim">Follow this one.</span></h1>
+      <p class="lede"><strong>Sunmin (Mina) Kim</strong> — M.S. Applied Data Science @ <strong>USC</strong> (Class of 2028),
+        seeking a <strong>Summer 2027 internship</strong>. I turn messy data into decisions companies can act on.</p>
+      <div class="links">
+        <a class="primary" href="https://github.com/nimnusmik">GitHub</a>
+        <a href="https://www.linkedin.com/in/sunnykimm12/">LinkedIn</a>
+        <a href="mailto:kimsunmin0227@gmail.com">Email</a>
       </div>
-      <div class="exp-item">
-        <div><span class="role">Data Analytics Lead (Intern)</span> · <span class="org">Semo</span><span class="when">AI agent startup · Sep–Dec 2025</span></div>
-        <p>Designed the GA4 metrics framework for an AI diagnostic platform (12+ KPIs, Looker Studio), built BigQuery reporting that cut reporting time by <b class="metric" data-count="40">40</b><b class="metric">%</b>, and ran beta experiments with 50+ users that lifted engagement by <b class="metric" data-count="18">18</b><b class="metric">%</b>.</p>
+      <div class="scroll-hint">▼ scroll — the point will follow</div>
+    </div>
+  </section>
+
+  <!-- SCENE 1 · SEMO -->
+  <section class="scene reveal" id="semo">
+    <div class="scene-inner wrap">
+      <div class="chapter">chapter 01 · the point gets measured</div>
+      <div class="org-chip">Semo — AI agent startup · Data Analytics Lead (Intern) · Sep–Dec 2025</div>
+      <h2>First, it became a metric.</h2>
+      <p class="body">At Semo I designed the <b>GA4 metrics framework</b> for an AI diagnostic platform —
+        12+ KPIs on Looker Studio — and built <b>BigQuery reporting</b> with calculated fields
+        so the team stopped waiting for numbers. Then I ran hypothesis-driven beta experiments with 50+ users.</p>
+      <div class="metrics">
+        <div class="metric-big"><div class="num"><span class="sign">−</span><span data-count="40">0</span>%</div><div class="lbl">reporting time</div></div>
+        <div class="metric-big"><div class="num"><span class="sign">+</span><span data-count="18">0</span>%</div><div class="lbl">user engagement</div></div>
+        <div class="metric-big"><div class="num"><span data-count="50">0</span>+</div><div class="lbl">beta users tested</div></div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="projects" class="reveal">
-  <div class="wrap">
-    <div class="stage">── stage 02 · <b>TRANSFORM</b> — what I built from it</div>
-    <h2><span class="bar"></span>Featured Projects</h2>
-    <div class="grid stagger">
-      <a class="card" href="https://github.com/nimnusmik/SeoulMetro-Deficit-Solution">
-        <span class="arrow">→</span>
-        <div class="tag">Public Data · ML</div>
-        <h3>Seoul Metro Deficit Analysis</h3>
-        <p>Clustered stations by revenue-loss patterns on large-scale transit data and proposed a fare policy projected to improve the deficit by <b class="metric" data-count="34">34</b><b class="metric">%</b>.</p>
-        <div class="stack">Python · scikit-learn · K-Means · SQL</div>
-      </a>
-      <a class="card" href="https://github.com/nimnusmik/toss-ad-click-prediction">
-        <span class="arrow">→</span>
-        <div class="tag">Enterprise Data · ML</div>
-        <h3>CTR Prediction — Toss Marketing Data</h3>
-        <p>Click-through-rate prediction competition on real fintech marketing data: feature engineering, gradient boosting, and evaluation at scale.</p>
-        <div class="stack">Python · XGBoost · CatBoost · Pandas</div>
-      </a>
-      <a class="card" href="https://github.com/nimnusmik/mlops-project-mlops-5">
-        <span class="arrow">→</span>
-        <div class="tag">Data Engineering · MLOps</div>
-        <h3>MLOps Movie Recommendation Pipeline</h3>
-        <p>End-to-end recommendation service: scheduled ingestion, experiment tracking, model serving, and a web front — deployed on AWS.</p>
-        <div class="stack">Airflow · Docker · MLflow · FastAPI · AWS</div>
-      </a>
-      <a class="card" href="https://github.com/nimnusmik/OpenDocuments">
-        <span class="arrow">→</span>
-        <div class="tag">AI Engineering · RAG</div>
-        <h3>OpenDocuments — RAG Platform</h3>
-        <p>Self-hosted retrieval-augmented generation platform that unifies organizational documents and answers natural-language queries with AI.</p>
-        <div class="stack">TypeScript · LLM · Vector Search</div>
-      </a>
+  <!-- SCENE 2 · GLOBAL VISION -->
+  <section class="scene reveal" id="gv">
+    <div class="scene-inner wrap">
+      <div class="chapter">chapter 02 · the point went to work</div>
+      <div class="org-chip">Global Vision — manufacturing · AX Engineer · 2026</div>
+      <h2>Then, it shipped to production.</h2>
+      <p class="body">At Global Vision I built internal automation <b>end-to-end</b>: real-time data pipelines,
+        AI model serving, and an outbound call management platform — mobile app for field sales,
+        live admin dashboard for managers — <b>used daily by sales teams</b>.
+        Not a class project. A system people depend on.</p>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="toolkit" class="reveal">
-  <div class="wrap">
-    <div class="stage">── stage 03 · <b>SERVE</b> — the tools I ship with</div>
-    <h2><span class="bar"></span>Toolkit</h2>
-    <div class="skills">
-      <span>Python</span><span>SQL</span><span>BigQuery</span><span>GA4</span>
-      <span>Looker Studio</span><span>Airflow</span><span>Docker</span><span>MLflow</span>
-      <span>scikit-learn</span><span>PyTorch</span><span>AWS</span><span>R</span>
+  <!-- SCENE 3 · PROJECTS -->
+  <section class="scene reveal" id="projects">
+    <div class="scene-inner wrap">
+      <div class="chapter">chapter 03 · the point multiplied</div>
+      <h2>It learned new shapes.</h2>
+      <div class="grid stagger">
+        <a class="card" href="https://github.com/nimnusmik/SeoulMetro-Deficit-Solution">
+          <span class="arrow">→</span>
+          <div class="tag">Public Data · ML</div>
+          <h3>Seoul Metro Deficit Analysis</h3>
+          <p>Clustered stations by revenue-loss patterns; proposed a fare policy projected to improve the deficit by 34%.</p>
+          <div class="stack">Python · scikit-learn · K-Means · SQL</div>
+        </a>
+        <a class="card" href="https://github.com/nimnusmik/toss-ad-click-prediction">
+          <span class="arrow">→</span>
+          <div class="tag">Enterprise Data · ML</div>
+          <h3>CTR Prediction — Toss</h3>
+          <p>Click-through-rate prediction on real fintech marketing data: feature engineering and gradient boosting at scale.</p>
+          <div class="stack">Python · XGBoost · CatBoost</div>
+        </a>
+        <a class="card" href="https://github.com/nimnusmik/mlops-project-mlops-5">
+          <span class="arrow">→</span>
+          <div class="tag">Data Engineering · MLOps</div>
+          <h3>MLOps Movie Recommendation</h3>
+          <p>End-to-end service: scheduled ingestion, experiment tracking, model serving, web front — deployed on AWS.</p>
+          <div class="stack">Airflow · Docker · MLflow · FastAPI</div>
+        </a>
+        <a class="card" href="https://github.com/nimnusmik/OpenDocuments">
+          <span class="arrow">→</span>
+          <div class="tag">AI Engineering · RAG</div>
+          <h3>OpenDocuments — RAG Platform</h3>
+          <p>Self-hosted RAG platform unifying organizational documents, answering natural-language queries with AI.</p>
+          <div class="stack">TypeScript · LLM · Vector Search</div>
+        </a>
+        <a class="card" href="https://nailspo.vercel.app">
+          <span class="arrow">→</span>
+          <div class="tag">Live Product · Gen AI</div>
+          <h3>Idala — AI Nail Art Studio</h3>
+          <p>Upload 1–3 inspiration photos and get a monthly nail-art concept collage — image generation pipeline shipped as a live mobile web app.</p>
+          <div class="stack">Next.js · Gemini · Redis · Neon</div>
+        </a>
+        <a class="card" href="https://yzrecipe.com">
+          <span class="arrow">→</span>
+          <div class="tag">Live Product · Data Pipeline</div>
+          <h3>yzrecipe — Viral Recipe Tracker</h3>
+          <p>Fully automated pipeline tracking Korea's trending recipes: scheduled collection every 3 hours, two-speed curation, zero-ops static publishing.</p>
+          <div class="stack">Python · launchd · Gemini · Static Site</div>
+        </a>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<footer class="reveal" id="output">
-  <div class="wrap">
-    <div class="stage">── final stage · <b>OUTPUT</b></div>
-    <div class="output-block">
-      <span class="p">$</span> pipeline run --candidate sunmin_kim<br>
-      <span class="p">[1/3]</span> ingest &nbsp;····· <span class="ok">done</span> <span class="p">(Semo · Global Vision)</span><br>
-      <span class="p">[2/3]</span> transform ·· <span class="ok">done</span> <span class="p">(6 shipped projects)</span><br>
-      <span class="p">[3/3]</span> serve &nbsp;······ <span class="ok">done</span> <span class="p">(USC ADS · Summer 2027 ready)</span><br>
-      <span class="gold">▶ output:</span> decisions <span class="ok">✓</span> — let's build some together.<br>
-      <span class="gold">▶ contact:</span> <a href="mailto:kimsunmin0227@gmail.com">kimsunmin0227@gmail.com</a> <span class="p">// I reply fast</span>
+  <!-- SCENE 4 · NOW -->
+  <section class="scene reveal" id="now">
+    <div class="scene-inner wrap">
+      <div class="chapter">chapter 04 · the point is now at usc</div>
+      <h2>Sharpening the toolkit.</h2>
+      <p class="body">M.S. in <b>Applied Data Science at USC</b> (2026–2028) — data infrastructure, large-scale ML,
+        and everything in between. 🏆 Minister of SMEs and Startups Award, Korea (2023) ·
+        🎓 B.A. AI Convergence (Business AI), HUFS.</p>
+      <div class="skills">
+        <span>Python</span><span>SQL</span><span>BigQuery</span><span>GA4</span>
+        <span>Looker Studio</span><span>Airflow</span><span>Docker</span><span>MLflow</span>
+        <span>scikit-learn</span><span>PyTorch</span><span>AWS</span><span>R</span>
+      </div>
     </div>
-    <p style="margin-top:18px">🏆 Minister of SMEs and Startups Award, Korea (2023) &nbsp;·&nbsp; 🎓 B.A. AI Convergence (Business AI), HUFS</p>
-  </div>
-</footer>
+  </section>
+
+  <!-- SCENE 5 · FINALE -->
+  <section class="scene reveal" id="finale">
+    <div class="scene-inner wrap">
+      <div class="chapter" style="text-align:center">final chapter · where every point ends up</div>
+      <div class="word">decisions.</div>
+      <p class="sub">That's where I take data. Let's build some together — Summer 2027.</p>
+      <div class="links">
+        <a class="primary" href="mailto:kimsunmin0227@gmail.com">Email me</a>
+        <a href="https://www.linkedin.com/in/sunnykimm12/">LinkedIn</a>
+        <a href="https://github.com/nimnusmik">GitHub</a>
+      </div>
+      <div class="meta">Sunmin (Mina) Kim · <a href="mailto:kimsunmin0227@gmail.com">kimsunmin0227@gmail.com</a> · I reply fast.</div>
+    </div>
+  </section>
+
+</div>
 
 <script>
 (function () {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ── scroll progress + mini nav ── */
+  /* ── progress + nav ── */
   const progress = document.getElementById('progress');
   const mininav = document.getElementById('mininav');
-  addEventListener('scroll', () => {
+  function scrollFrac() {
     const h = document.documentElement;
-    progress.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
-    mininav.classList.toggle('show', h.scrollTop > 320);
-  }, { passive: true });
-
-
-  /* ── pipeline rail: nodes per section + flowing dot ── */
-  const rail = document.getElementById('rail');
-  const railSections = ['experience', 'projects', 'toolkit', 'output'].map(id => document.getElementById(id));
-  function layoutRail() {
-    if (innerWidth < 1100) return;
-    const wrap = document.querySelector('header .wrap');
-    const left = wrap.getBoundingClientRect().left - 36;
-    const docH = document.documentElement.scrollHeight;
-    rail.style.left = left + 'px';
-    rail.style.height = docH + 'px';
-    rail.querySelectorAll('.node').forEach(n => n.remove());
-    railSections.forEach(sec => {
-      if (!sec) return;
-      const n = document.createElement('div');
-      n.className = 'node';
-      n.dataset.for = sec.id;
-      n.style.top = (sec.offsetTop + 58) + 'px';
-      rail.appendChild(n);
-    });
+    return h.scrollTop / (h.scrollHeight - h.clientHeight);
   }
-  layoutRail();
-  addEventListener('resize', layoutRail);
-  addEventListener('load', layoutRail);
-  const flowDot = rail.querySelector('.flow');
   addEventListener('scroll', () => {
-    if (innerWidth < 1100) return;
-    const y = scrollY + innerHeight * 0.38;
-    flowDot.style.top = y + 'px';
-    rail.querySelectorAll('.node').forEach(n => {
-      n.classList.toggle('active', y >= parseFloat(n.style.top));
-    });
+    progress.style.width = (scrollFrac() * 100) + '%';
+    mininav.classList.toggle('show', scrollY > innerHeight * 0.7);
   }, { passive: true });
 
-
-
-  /* ── reveal on scroll ── */
+  /* ── reveal + countup ── */
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
@@ -327,14 +314,13 @@
       countUp(e.target);
       io.unobserve(e.target);
     });
-  }, { threshold: 0.18 });
+  }, { threshold: 0.25 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  /* ── metric count-up ── */
   function countUp(scope) {
-    if (reduced) return;
     scope.querySelectorAll('[data-count]').forEach(el => {
-      const target = +el.dataset.count, dur = 900, t0 = performance.now();
+      const target = +el.dataset.count, dur = 1100, t0 = performance.now();
+      if (reduced) { el.textContent = target; return; }
       (function tick(t) {
         const p = Math.min((t - t0) / dur, 1);
         el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
@@ -343,95 +329,129 @@
     });
   }
 
-  /* ── typed rotator in hero ── */
-  const words = ['messy data', 'raw events', 'scattered logs', 'messy data'];
-  const typed = document.getElementById('typed');
-  if (!reduced && typed) {
-    let wi = 0;
-    function typeWord(word, cb) {
-      let i = 0;
-      (function step() {
-        typed.textContent = word.slice(0, ++i);
-        if (i < word.length) setTimeout(step, 70); else cb();
-      })();
-    }
-    function eraseWord(cb) {
-      (function step() {
-        const cur = typed.textContent;
-        typed.textContent = cur.slice(0, -1);
-        if (typed.textContent) setTimeout(step, 40); else cb();
-      })();
-    }
-    (function loop() {
-      setTimeout(() => {
-        if (wi >= words.length - 1) return; // end on "messy data"
-        eraseWord(() => typeWord(words[++wi], loop));
-      }, 2100);
-    })();
-  }
+  if (reduced) return;
 
-  /* ── card tilt ── */
-  if (!reduced && matchMedia('(hover: hover)').matches) {
-    document.querySelectorAll('.card').forEach(card => {
-      card.addEventListener('mousemove', e => {
-        const r = card.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width - .5;
-        const y = (e.clientY - r.top) / r.height - .5;
-        card.style.transform = `perspective(700px) rotateY(${x * 5}deg) rotateX(${y * -5}deg) translateY(-2px)`;
-      });
-      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+  /* ══════════ THE DATA POINT — canvas journey ══════════ */
+  const canvas = document.getElementById('stage');
+  const ctx = canvas.getContext('2d');
+  let W, H, DPR = Math.min(devicePixelRatio, 2);
+  function resize() {
+    W = canvas.width = innerWidth * DPR;
+    H = canvas.height = innerHeight * DPR;
+    canvas.style.width = innerWidth + 'px';
+    canvas.style.height = innerHeight + 'px';
+  }
+  resize(); addEventListener('resize', resize);
+
+  /* ambient starfield (dim data points, parallax) */
+  const stars = Array.from({ length: 90 }, () => ({
+    x: Math.random(), y: Math.random() * 6,
+    r: Math.random() * 1.4 + 0.5, a: Math.random() * .35 + .08,
+    drift: Math.random() * .4 + .1,
+  }));
+
+  /* trail of the hero point */
+  const trail = [];
+  const TRAIL_MAX = 34;
+
+  /* companions appear in projects scene */
+  const companions = [ { off: -70, ph: 0 }, { off: 70, ph: 2 }, { off: -130, ph: 4 }, { off: 130, ph: 5 } ];
+
+  /* burst particles for finale */
+  let burst = [], burstDone = false;
+  function makeBurst(x, y) {
+    burst = Array.from({ length: 90 }, (_, i) => {
+      const ang = Math.random() * Math.PI * 2, sp = (Math.random() * 5 + 2) * DPR;
+      return { x, y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp,
+        life: 1, decay: Math.random() * .012 + .006,
+        gold: i % 3 === 0 };
     });
   }
 
-  /* ── hero: messy dots organize into an ascending trend line ── */
-  const canvas = document.getElementById('dots');
-  if (canvas && !reduced) {
-    const ctx = canvas.getContext('2d');
-    let W, H, pts = [], t0 = performance.now();
-    const N = 46;
-    function resize() {
-      W = canvas.width = canvas.offsetWidth * devicePixelRatio;
-      H = canvas.height = canvas.offsetHeight * devicePixelRatio;
-      pts = Array.from({ length: N }, (_, i) => {
-        const fx = (0.06 + 0.88 * i / (N - 1)) * W;                       // target: even spread
-        const fy = H * (0.86 - 0.62 * (i / (N - 1)))                      // ascending line
-                 + Math.sin(i * 1.7) * H * 0.05;                          // slight waviness
-        return {
-          x: Math.random() * W, y: Math.random() * H,                     // start: scattered
-          fx, fy, phase: Math.random() * Math.PI * 2,
-        };
-      });
-    }
-    resize(); addEventListener('resize', resize);
-    (function draw(now) {
-      const p = Math.min((now - t0) / 3800, 1);                           // organize over ~4s
-      const ease = 1 - Math.pow(1 - p, 3);
-      ctx.clearRect(0, 0, W, H);
-      // connecting line appears as points settle
-      if (p > 0.55) {
-        ctx.globalAlpha = (p - 0.55) / 0.45 * 0.5;
-        ctx.strokeStyle = '#990000'; ctx.lineWidth = 1.4 * devicePixelRatio;
+  function pointScreenPos(now) {
+    const f = scrollFrac();
+    const yBase = H * (0.22 + f * 0.5);
+    const xBase = W * 0.5 + Math.sin(f * Math.PI * 4) * W * 0.3;
+    const wob = Math.sin(now / 700) * 4 * DPR;
+    return { x: xBase + wob, y: yBase + Math.cos(now / 900) * 3 * DPR, f };
+  }
+
+  (function draw(now) {
+    ctx.clearRect(0, 0, W, H);
+    const f = scrollFrac();
+
+    /* starfield with parallax */
+    stars.forEach(s => {
+      const sy = ((s.y - (scrollY / innerHeight) * s.drift) % 1.15 + 1.15) % 1.15;
+      ctx.globalAlpha = s.a;
+      ctx.fillStyle = '#8888a0';
+      ctx.beginPath();
+      ctx.arc(s.x * W, sy * H, s.r * DPR, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    const p = pointScreenPos(now);
+
+    /* finale: burst instead of point */
+    const nearEnd = f > 0.965;
+    if (nearEnd && !burstDone) { burstDone = true; makeBurst(p.x, H * 0.35); }
+    if (!nearEnd && burstDone && f < 0.9) { burstDone = false; burst = []; }
+
+    if (burstDone) {
+      burst.forEach(b => {
+        b.x += b.vx; b.y += b.vy; b.vy += 0.05 * DPR; b.life -= b.decay;
+        if (b.life <= 0) return;
+        ctx.globalAlpha = Math.max(b.life, 0) * .9;
+        ctx.fillStyle = b.gold ? '#ffcc00' : '#ff4444';
         ctx.beginPath();
-        pts.forEach((pt, i) => {
-          const x = pt.x + (pt.fx - pt.x) * ease;
-          const y = pt.y + (pt.fy - pt.y) * ease + Math.sin(now / 900 + pt.phase) * 2 * devicePixelRatio;
-          i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
-        });
-        ctx.stroke();
-      }
-      pts.forEach((pt, i) => {
-        const x = pt.x + (pt.fx - pt.x) * ease;
-        const y = pt.y + (pt.fy - pt.y) * ease + Math.sin(now / 900 + pt.phase) * 2 * devicePixelRatio;
-        ctx.globalAlpha = 0.25 + 0.5 * ease;
-        ctx.fillStyle = i % 6 === 0 ? '#ffcc00' : '#990000';
-        ctx.beginPath();
-        ctx.arc(x, y, (i % 6 === 0 ? 2.6 : 1.8) * devicePixelRatio, 0, Math.PI * 2);
+        ctx.arc(b.x, b.y, 2.2 * DPR * b.life + .6, 0, Math.PI * 2);
         ctx.fill();
       });
+    } else {
+      /* trail */
+      trail.push({ x: p.x, y: p.y });
+      if (trail.length > TRAIL_MAX) trail.shift();
+      trail.forEach((t, i) => {
+        const a = i / trail.length;
+        ctx.globalAlpha = a * .5;
+        ctx.fillStyle = '#ff4444';
+        ctx.beginPath();
+        ctx.arc(t.x, t.y - (trail.length - i) * 1.2 * DPR, 2.4 * DPR * a + .5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      /* companions during projects scene */
+      const proj = document.getElementById('projects');
+      const pr = proj.getBoundingClientRect();
+      const projVis = pr.top < innerHeight * .8 && pr.bottom > innerHeight * .2;
+      if (projVis) {
+        companions.forEach(c => {
+          const cx = p.x + Math.sin(now / 800 + c.ph) * 26 * DPR + c.off * DPR * .55;
+          const cy = p.y + Math.cos(now / 700 + c.ph) * 20 * DPR;
+          ctx.globalAlpha = .8;
+          ctx.fillStyle = '#ffcc00';
+          ctx.beginPath();
+          ctx.arc(cx, cy, 3 * DPR, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+
+      /* the point itself, glowing */
+      const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 26 * DPR);
+      glow.addColorStop(0, 'rgba(255,68,68,.85)');
+      glow.addColorStop(1, 'rgba(255,68,68,0)');
       ctx.globalAlpha = 1;
-      requestAnimationFrame(draw);
-    })(t0);
-  }
+      ctx.fillStyle = glow;
+      ctx.beginPath(); ctx.arc(p.x, p.y, 26 * DPR, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#ff5555';
+      ctx.beginPath(); ctx.arc(p.x, p.y, 4.2 * DPR, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(p.x, p.y, 1.6 * DPR, 0, Math.PI * 2); ctx.fill();
+    }
+
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(draw);
+  })(performance.now());
 })();
 </script>
 </body>
