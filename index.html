@@ -100,6 +100,8 @@
   .card .stack { margin-top: 12px; font-size: 12px; color: var(--muted);
     font-family: ui-monospace, "SF Mono", Menlo, monospace; }
   .card .arrow { float: right; color: var(--accent); opacity: 0; transform: translateX(-6px); transition: all .2s ease; }
+  .more { margin-top: 18px; font-size: 13.5px; color: var(--muted); }
+  .more a { color: var(--accent); }
   .card:hover .arrow { opacity: 1; transform: none; }
 
   .skills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
@@ -211,26 +213,12 @@
       <div class="chapter">chapter 03 · the point multiplied</div>
       <h2>It learned new shapes.</h2>
       <div class="grid stagger">
-        <a class="card" href="https://github.com/nimnusmik/SeoulMetro-Deficit-Solution">
+        <a class="card" href="https://github.com/nimnusmik/onbid-auction-pipeline">
           <span class="arrow">→</span>
-          <div class="tag">Public Data · ML</div>
-          <h3>Seoul Metro Deficit Analysis</h3>
-          <p>Clustered stations by revenue-loss patterns; proposed a fare policy projected to improve the deficit by 34%.</p>
-          <div class="stack">Python · scikit-learn · K-Means · SQL</div>
-        </a>
-        <a class="card" href="https://github.com/nimnusmik/toss-ad-click-prediction">
-          <span class="arrow">→</span>
-          <div class="tag">Enterprise Data · ML</div>
-          <h3>CTR Prediction — Toss</h3>
-          <p>Click-through-rate prediction on real fintech marketing data: feature engineering and gradient boosting at scale.</p>
-          <div class="stack">Python · XGBoost · CatBoost</div>
-        </a>
-        <a class="card" href="https://github.com/nimnusmik/mlops-project-mlops-5">
-          <span class="arrow">→</span>
-          <div class="tag">Data Engineering · MLOps</div>
-          <h3>MLOps Movie Recommendation</h3>
-          <p>End-to-end service: scheduled ingestion, experiment tracking, model serving, web front — deployed on AWS.</p>
-          <div class="stack">Airflow · Docker · MLflow · FastAPI</div>
+          <div class="tag">Data Engineering · Global Vision</div>
+          <h3>Onbid Auction Pipeline</h3>
+          <p>Daily ETL for Korea's public-asset auction Open API: 5-stage collection, a quality gate that halts bad runs, and tiered address matching to real-transaction prices — served through an API and dashboard.</p>
+          <div class="stack">Python · SQLite · Flask · Next.js · Docker Compose</div>
         </a>
         <a class="card" href="https://github.com/nimnusmik/gvms_TM">
           <span class="arrow">→</span>
@@ -239,7 +227,37 @@
           <p>Outbound-call management system used daily by sales teams: admin web dashboard, agent mobile app, and async backend — built solo, end to end.</p>
           <div class="stack">Django · React · React Native · PostgreSQL · Redis · Docker</div>
         </a>
+        <a class="card" href="https://github.com/nimnusmik/CV_documents_classification_competition">
+          <span class="arrow">→</span>
+          <div class="tag">Computer Vision · 🥈 2nd Place</div>
+          <h3>Document Image Classification</h3>
+          <p>Team lead. 17-class document classification with an Optuna-tuned ensemble of ConvNeXt, EfficientNet, and Swin plus TTA — F1 0.97+, 2nd place overall.</p>
+          <div class="stack">PyTorch · Optuna · ConvNeXt · TTA</div>
+        </a>
+        <a class="card" href="https://github.com/nimnusmik/NLP-summary-competition">
+          <span class="arrow">→</span>
+          <div class="tag">NLP · 🥉 3rd Place</div>
+          <h3>Dialogue Summarization</h3>
+          <p>Team lead of six. Summarized 12K everyday dialogues, scored on ROUGE: fine-tuned KoBART/T5 with LLM-based data augmentation and Optuna tuning.</p>
+          <div class="stack">PyTorch · Transformers · KoBART · Solar API</div>
+        </a>
+        <a class="card" href="https://github.com/nimnusmik/toss-ad-click-prediction">
+          <span class="arrow">→</span>
+          <div class="tag">Enterprise Data · ML</div>
+          <h3>CTR Prediction — Toss</h3>
+          <p>Click-through-rate prediction on real fintech marketing data: feature engineering and gradient boosting at scale.</p>
+          <div class="stack">Python · XGBoost · CatBoost</div>
+        </a>
+        <a class="card" href="https://github.com/nimnusmik/SeoulMetro-Deficit-Solution">
+          <span class="arrow">→</span>
+          <div class="tag">Public Data · ML</div>
+          <h3>Seoul Metro Deficit Analysis</h3>
+          <p>Clustered stations by revenue-loss patterns; proposed a fare policy projected to improve the deficit by 34%.</p>
+          <div class="stack">Python · scikit-learn · K-Means · SQL</div>
+        </a>
       </div>
+      <p class="more">Also on the team: <a href="https://github.com/nimnusmik/mlops-project-mlops-5">MLOps Movie Recommendation</a> (Airflow · MLflow · FastAPI on AWS) ·
+        <a href="https://github.com/nimnusmik/langchainproject">Commerce Marketing AI Agent</a> (LangChain · FastAPI · SQLite FTS5 RAG)</p>
     </div>
   </section>
 
