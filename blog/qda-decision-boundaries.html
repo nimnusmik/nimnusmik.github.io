@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><circle cx=%228%22 cy=%228%22 r=%226%22 fill=%22%23ffcc00%22/></svg>">
+<title>Why QDA Boundaries Curve — Sunmin Kim</title>
+<meta name="description" content="LDA assumes every class shares one variance. Drop that assumption and the x² term stops canceling — an interactive walk through ISLR 4.8.3.">
+<style>
+  :root {
+    --bg: #0c0c10; --panel: #14141a; --ink: #ececf0; --muted: #9a9aa4;
+    --accent: #ff4444; --accent-deep: #990000; --gold: #ffcc00; --line: #26262e;
+    --a-fill: rgba(255,204,0,.13); --b-fill: rgba(255,68,68,.14);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.75; -webkit-font-smoothing: antialiased;
+    font-size: 16px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px 80px; }
+  header { padding: 110px 0 8px; }
+  #mininav { position: fixed; top: 0; left: 0; right: 0; z-index: 90;
+    background: rgba(12,12,16,.7); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line); }
+  #mininav .inner { max-width: 960px; margin: 0 auto; padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between; }
+  #mininav .name { font-weight: 800; font-size: 15px; color: var(--ink); text-decoration: none; }
+  #mininav .name span { color: var(--accent); }
+  #mininav nav { display: flex; gap: 18px; }
+  #mininav nav a { text-decoration: none; color: var(--muted); font-size: 13.5px; font-weight: 600; }
+  #mininav nav a:hover, #mininav nav a.cta { color: var(--gold); }
+  #mininav nav a.here { color: var(--gold); }
+  @media (max-width: 640px) { #mininav nav a:not(.cta) { display: none; } }
+  .chapter { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px;
+    color: var(--gold); letter-spacing: .18em; text-transform: uppercase; margin: 36px 0 14px; }
+  .chapter::before { content: "── "; color: var(--muted); }
+  h1 { font-size: clamp(30px, 6vw, 42px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 12px; text-wrap: balance; }
+  .lede { font-size: 17px; color: var(--muted); max-width: 62ch; }
+  h2 { font-size: 23px; font-weight: 800; letter-spacing: -0.01em; margin: 52px 0 10px; text-wrap: balance; }
+  p { max-width: 66ch; margin: 12px 0; color: var(--muted); }
+  p b, li b { color: var(--ink); }
+  .chip { display: inline-block; padding: 1px 10px; border-radius: 999px; font-weight: 700; font-size: 13.5px; border: 1px solid var(--line); }
+  .chip.a { color: var(--gold); background: var(--a-fill); }
+  .chip.b { color: var(--accent); background: var(--b-fill); }
+  .hl-a { color: var(--gold); font-weight: 700; }
+  .hl-b { color: var(--accent); font-weight: 700; }
+  .hl-k { background: linear-gradient(transparent 62%, var(--b-fill) 62%); font-weight: 700; color: var(--ink); }
+  figure { margin: 20px 0 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 10px 6px; }
+  figure svg { display: block; width: 100%; height: auto; }
+  figcaption { font-size: 13.5px; color: var(--muted); padding: 6px 10px 10px; line-height: 1.6; }
+  .formula { background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 14px 18px; margin: 16px 0; overflow-x: auto; font-size: 17px; line-height: 2; color: var(--ink); }
+  sup, sub { line-height: 0; }
+  .controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 4px 10px 10px; font-size: 14px; color: var(--muted); }
+  .controls label { display: flex; align-items: center; gap: 10px; }
+  input[type=range] { width: min(240px, 55vw); accent-color: var(--accent); }
+  input[type=range]:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  .readout { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ink); min-width: 64px; }
+  .verdict { font-weight: 700; }
+  .steps { counter-reset: s; padding: 0; margin: 16px 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  .steps li { position: relative; padding-left: 44px; max-width: 66ch; color: var(--muted); }
+  .steps li::before { counter-increment: s; content: counter(s);
+    position: absolute; left: 0; top: 2px; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--panel); border: 1px solid var(--line); color: var(--gold);
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .takeaway { border-left: 3px solid var(--gold); background: var(--panel);
+    border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 20px 0; color: var(--ink); }
+  footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--line);
+    font-size: 13.5px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { color: var(--gold); }
+  a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 6px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div id="mininav">
+  <div class="inner">
+    <a class="name" href="../">Sunmin<span>.</span>Kim</a>
+    <nav>
+      <a href="../#semo">Experience</a>
+      <a href="../#projects">Projects</a>
+      <a href="../#side">Side</a>
+      <a href="../#now">Now</a>
+      <a class="here" href="./">Tech Blog</a>
+      <a class="cta" href="mailto:kimsunmin0227@gmail.com">Contact ↗</a>
+    </nav>
+  </div>
+</div>
+<div class="wrap">
+<header>
+  <div class="chapter">statistics · ISLR 4.8.3 · 2026-10-17</div>
+  <h1>Why QDA Boundaries Curve</h1>
+  <p class="lede">While working through ISLR exercise 4.8.3 for my ML class, I realized LDA quietly makes one assumption: every class shares the same variance. This note is me convincing myself, with pictures, why dropping that single assumption bends the decision boundary.</p>
+</header>
+
+<h2>The question</h2>
+<p>One feature X, K classes. Class k generates data from a normal distribution N(μ<sub>k</sub>, σ²<sub>k</sub>). The LDA derivation in ISLR 4.4 assumes <span class="hl-k">σ²₁ = … = σ²<sub>K</sub></span>. <b>Drop that assumption and show the Bayes classifier is quadratic, not linear.</b></p>
+
+<h2>1. Equal variances: one crossing, so a line</h2>
+<p>Say class <span class="chip a">A</span> and class <span class="chip b">B</span> have bell curves of the same width. The classification rule is simple: at any x, <b>the taller curve wins</b>. Equal widths means the two curves cross exactly once, and that crossing is the boundary. One boundary point means everything left of it is A and everything right of it is B. That is a linear classifier — LDA.</p>
+
+<figure>
+  <svg id="fig1" viewBox="0 0 680 300" role="img" aria-label="Two normal densities with equal variance crossing once, with a single vertical boundary."></svg>
+  <figcaption>Curves of equal width meet only once. Left of the crossing <span class="hl-a">A</span> is always taller; right of it <span class="hl-b">B</span> is.</figcaption>
+</figure>
+
+<h2>2. Different variances: the boundary splits in two</h2>
+<p>Now make <span class="chip a">A</span> narrow and <span class="chip b">B</span> wide. Drag the slider below and watch the boundary.</p>
+<p>The key scene is the far left. As x moves left, away from A's mean, the narrow A curve crashes to zero quickly, but the wide B curve decays slowly. So at some point <b>B becomes taller again</b>. Result: <b>two</b> boundary points, and the regions split as <span class="hl-b">B</span> | <span class="hl-a">A</span> | <span class="hl-b">B</span>. No single point (no line) can draw that shape. An equation with up to two roots is a quadratic.</p>
+
+<figure>
+  <div class="controls">
+    <label>B's standard deviation σ<sub>B</sub>
+      <input type="range" id="sigmaB" min="1" max="3.2" step="0.05" value="2.4" aria-describedby="sigmaBval">
+      <span class="readout" id="sigmaBval">2.40</span>
+    </label>
+    <span id="verdict" class="verdict"></span>
+  </div>
+  <svg id="fig2" viewBox="0 0 680 300" role="img" aria-label="Two normal densities with different variances crossing twice, with two boundary points."></svg>
+  <figcaption>Drag σ<sub>B</sub> down to 1.00 to match A's width: the left boundary escapes off-screen and only one boundary remains. That moment is exactly LDA.</figcaption>
+</figure>
+
+<h2>3. The same story in math</h2>
+<p>The Bayes classifier picks the class with the largest π<sub>k</sub>·f<sub>k</sub>(x). Taking logs does not change which one is largest, so we can expand each class's "score" δ<sub>k</sub>(x) = log(π<sub>k</sub> f<sub>k</sub>(x)). Plugging in the normal density:</p>
+
+<div class="formula">
+  δ<sub>k</sub>(x) = <span class="hl-k">−<sup>1</sup>⁄<sub>2σ²<sub>k</sub></sub> · x²</span> + <sup>μ<sub>k</sub></sup>⁄<sub>σ²<sub>k</sub></sub> · x − <sup>μ²<sub>k</sub></sup>⁄<sub>2σ²<sub>k</sub></sub> − log σ<sub>k</sub> + log π<sub>k</sub>
+</div>
+
+<p>Everything else is a constant. The whole argument lives in one place: <span class="hl-k">the x² coefficient, −1/(2σ²<sub>k</sub>)</span>.</p>
+
+<ul class="steps">
+  <li><b>Shared terms cancel in a comparison.</b> Give every contestant 10 extra points and the ranking does not change. When we compare the δ<sub>k</sub> across classes, any term that is identical for all k has no effect on the winner.</li>
+  <li><b>LDA (common σ):</b> the x² coefficient −1/(2σ²) is the same for every class, so it cancels. The score is <b>linear</b> in x, and the boundary (where two scores tie) is the root of a linear equation: one point.</li>
+  <li><b>QDA (class-specific σ<sub>k</sub>):</b> the x² coefficient depends on k, so it cannot cancel. The score is <b>quadratic</b> in x, and the boundary is the root of a quadratic equation: up to two points. That is the B | A | B picture from figure 2.</li>
+</ul>
+
+<p>Figure 3 shows exactly this. Plot the score difference δ<sub>A</sub>(x) − δ<sub>B</sub>(x): with equal variances it is a straight line crossing zero once; with different variances it is a parabola crossing zero twice.</p>
+
+<figure>
+  <svg id="fig3" viewBox="0 0 680 300" role="img" aria-label="Score difference curves: a line for equal variances, a parabola for different variances."></svg>
+  <figcaption>Classify as A wherever δ<sub>A</sub>−δ<sub>B</sub> &gt; 0. The dashed line (equal variances) crosses zero once; the red parabola (different variances) crosses twice. Zero crossings are boundary points.</figcaption>
+</figure>
+
+<h2>4. One-line takeaway</h2>
+<div class="takeaway">
+  <b>Set σ²<sub>k</sub> = σ² and the x² term vanishes, recovering LDA's linear discriminant.</b> LDA is a special case of QDA, and the "equal variances" assumption is the one thing that was keeping the boundary straight.
+</div>
+<p>What I'll remember: when someone says "QDA is more flexible than LDA," the entire difference is a single subscript on σ.</p>
+
+<footer>
+  <span>Sunmin (Mina) Kim · <a href="../">portfolio</a></span>
+  <span>An Introduction to Statistical Learning, Ex. 4.8.3</span>
+</footer>
+</div>
+
+<script>
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const N = (x, mu, s) => Math.exp(-((x - mu) ** 2) / (2 * s * s)) / (s * Math.sqrt(2 * Math.PI));
+
+function scales(W, H, pad) {
+  const x0 = -8, x1 = 10;
+  return {
+    sx: x => pad.l + (x - x0) / (x1 - x0) * (W - pad.l - pad.r),
+    sy: (y, ymax) => H - pad.b - y / ymax * (H - pad.t - pad.b),
+    x0, x1
+  };
+}
+function curvePath(s, f, ymax, H, pad) {
+  let d = '';
+  for (let i = 0; i <= 360; i++) {
+    const x = s.x0 + (s.x1 - s.x0) * i / 360;
+    d += (i ? 'L' : 'M') + s.sx(x).toFixed(1) + ',' + s.sy(f(x), ymax).toFixed(1);
+  }
+  return d;
+}
+function areaPath(s, f, ymax, H, pad, xa, xb) {
+  let d = 'M' + s.sx(xa).toFixed(1) + ',' + (H - pad.b);
+  for (let i = 0; i <= 120; i++) {
+    const x = xa + (xb - xa) * i / 120;
+    d += 'L' + s.sx(x).toFixed(1) + ',' + s.sy(f(x), ymax).toFixed(1);
+  }
+  return d + 'L' + s.sx(xb).toFixed(1) + ',' + (H - pad.b) + 'Z';
+}
+function axis(s, H, pad, ticks) {
+  const muted = css('--muted'), line = css('--line');
+  let g = `<line x1="${s.sx(s.x0)}" y1="${H - pad.b}" x2="${s.sx(s.x1)}" y2="${H - pad.b}" stroke="${line}" stroke-width="1"/>`;
+  for (const t of ticks) {
+    g += `<line x1="${s.sx(t)}" y1="${H - pad.b}" x2="${s.sx(t)}" y2="${H - pad.b + 4}" stroke="${line}"/>`;
+    g += `<text x="${s.sx(t)}" y="${H - pad.b + 18}" text-anchor="middle" font-size="11" fill="${muted}">${t}</text>`;
+  }
+  return g;
+}
+const PAD = { l: 16, r: 16, t: 30, b: 30 }, W = 680, H = 300;
+const A = () => css('--gold'), B = () => css('--accent');
+
+function drawFig1() {
+  const a = A(), b = B(), af = css('--a-fill'), bf = css('--b-fill'), ink = css('--ink'), muted = css('--muted');
+  const s = scales(W, H, PAD), muA = 0, muB = 4, sd = 1.5;
+  const fA = x => N(x, muA, sd), fB = x => N(x, muB, sd), ymax = N(0, 0, sd) * 1.15;
+  const xc = (muA + muB) / 2;  // equal variances: boundary = midpoint of the means
+  let g = axis(s, H, PAD, [-5, 0, 2, 4, 8]);
+  g += `<path d="${areaPath(s, fA, ymax, H, PAD, s.x0, xc)}" fill="${af}"/>`;
+  g += `<path d="${areaPath(s, fB, ymax, H, PAD, xc, s.x1)}" fill="${bf}"/>`;
+  g += `<path d="${curvePath(s, fA, ymax, H, PAD)}" fill="none" stroke="${a}" stroke-width="2"/>`;
+  g += `<path d="${curvePath(s, fB, ymax, H, PAD)}" fill="none" stroke="${b}" stroke-width="2"/>`;
+  g += `<line x1="${s.sx(xc)}" y1="${PAD.t - 6}" x2="${s.sx(xc)}" y2="${H - PAD.b}" stroke="${ink}" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+  g += `<text x="${s.sx(xc)}" y="${PAD.t - 10}" text-anchor="middle" font-size="12" font-weight="700" fill="${ink}">one boundary</text>`;
+  g += `<text x="${s.sx(muA)}" y="${s.sy(fA(muA), ymax) - 8}" text-anchor="middle" font-size="13" font-weight="700" fill="${a}">A</text>`;
+  g += `<text x="${s.sx(muB)}" y="${s.sy(fB(muB), ymax) - 8}" text-anchor="middle" font-size="13" font-weight="700" fill="${b}">B</text>`;
+  g += `<text x="${s.sx((s.x0 + xc) / 2)}" y="${H - PAD.b - 10}" text-anchor="middle" font-size="12" fill="${muted}">← all A</text>`;
+  g += `<text x="${s.sx((xc + s.x1) / 2)}" y="${H - PAD.b - 10}" text-anchor="middle" font-size="12" fill="${muted}">all B →</text>`;
+  document.getElementById('fig1').innerHTML = g;
+}
+
+function crossings(fA, fB, x0, x1) {
+  const pts = []; let prev = fA(x0) - fB(x0);
+  for (let i = 1; i <= 1200; i++) {
+    const x = x0 + (x1 - x0) * i / 1200, cur = fA(x) - fB(x);
+    if (prev === 0 || prev * cur < 0) pts.push(x);
+    prev = cur;
+  }
+  return pts;
+}
+
+function drawFig2() {
+  const a = A(), b = B(), af = css('--a-fill'), bf = css('--b-fill'), ink = css('--ink');
+  const sdB = parseFloat(document.getElementById('sigmaB').value);
+  document.getElementById('sigmaBval').textContent = sdB.toFixed(2);
+  const s = scales(W, H, PAD), muA = 0, muB = 2, sdA = 1;
+  const fA = x => N(x, muA, sdA), fB = x => N(x, muB, sdB), ymax = N(0, 0, sdA) * 1.15;
+  const xs = crossings(fA, fB, s.x0, s.x1);
+  const bounds = [s.x0, ...xs, s.x1];
+  let g = axis(s, H, PAD, [-5, -2, 0, 2, 5, 8]);
+  for (let i = 0; i < bounds.length - 1; i++) {
+    const mid = (bounds[i] + bounds[i + 1]) / 2;
+    const winA = fA(mid) > fB(mid);
+    g += `<path d="${areaPath(s, winA ? fA : fB, ymax, H, PAD, bounds[i], bounds[i + 1])}" fill="${winA ? af : bf}"/>`;
+    g += `<text x="${s.sx(mid)}" y="${H - PAD.b - 8}" text-anchor="middle" font-size="12" font-weight="700" fill="${winA ? a : b}">${winA ? 'A' : 'B'}</text>`;
+  }
+  g += `<path d="${curvePath(s, fA, ymax, H, PAD)}" fill="none" stroke="${a}" stroke-width="2"/>`;
+  g += `<path d="${curvePath(s, fB, ymax, H, PAD)}" fill="none" stroke="${b}" stroke-width="2"/>`;
+  for (const xc of xs) {
+    g += `<line x1="${s.sx(xc)}" y1="${PAD.t + 4}" x2="${s.sx(xc)}" y2="${H - PAD.b}" stroke="${ink}" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+  }
+  g += `<text x="${s.sx(muA)}" y="${s.sy(fA(muA), ymax) - 8}" text-anchor="middle" font-size="13" font-weight="700" fill="${a}">A (narrow)</text>`;
+  g += `<text x="${s.sx(muB + sdB)}" y="${s.sy(fB(muB), ymax) - 8}" text-anchor="middle" font-size="13" font-weight="700" fill="${b}">B (wide)</text>`;
+  document.getElementById('fig2').innerHTML = g;
+  const v = document.getElementById('verdict');
+  if (xs.length >= 2) { v.textContent = `${xs.length} boundary points → quadratic (QDA)`; v.style.color = b; }
+  else { v.textContent = '1 boundary point → linear (LDA)'; v.style.color = a; }
+}
+
+function drawFig3() {
+  const b = B(), ink = css('--ink'), muted = css('--muted'), line = css('--line'), panel = css('--panel');
+  const s = scales(W, H, PAD);
+  const delta = (x, mu, sd) => -x * x / (2 * sd * sd) + mu * x / (sd * sd) - mu * mu / (2 * sd * sd) - Math.log(sd);
+  const dSame = x => delta(x, 0, 1.5) - delta(x, 4, 1.5);   // equal variances: linear difference
+  const dDiff = x => delta(x, 0, 1) - delta(x, 2, 2.4);     // different variances: quadratic difference
+  const ymin = -4, ymax = 4;
+  const sy = y => PAD.t + (ymax - Math.max(ymin, Math.min(ymax, y))) / (ymax - ymin) * (H - PAD.t - PAD.b);
+  const path = f => { let d = ''; for (let i = 0; i <= 360; i++) { const x = s.x0 + (s.x1 - s.x0) * i / 360; d += (i ? 'L' : 'M') + s.sx(x).toFixed(1) + ',' + sy(f(x)).toFixed(1); } return d; };
+  let g = `<line x1="${s.sx(s.x0)}" y1="${sy(0)}" x2="${s.sx(s.x1)}" y2="${sy(0)}" stroke="${line}" stroke-width="1"/>`;
+  g += `<text x="${s.sx(s.x1) - 4}" y="${sy(0) - 6}" text-anchor="end" font-size="11" fill="${muted}">0 (the winner flips here)</text>`;
+  g += `<path d="${path(dSame)}" fill="none" stroke="${muted}" stroke-width="2" stroke-dasharray="6 5"/>`;
+  g += `<path d="${path(dDiff)}" fill="none" stroke="${b}" stroke-width="2"/>`;
+  const mark = (f, range) => { const pts = []; let prev = f(range[0]); for (let i = 1; i <= 1200; i++) { const x = range[0] + (range[1] - range[0]) * i / 1200, c = f(x); if (prev * c < 0) pts.push(x); prev = c; } return pts; };
+  for (const x of mark(dDiff, [s.x0, s.x1])) g += `<circle cx="${s.sx(x)}" cy="${sy(0)}" r="5" fill="${b}" stroke="${panel}" stroke-width="2"/>`;
+  for (const x of mark(dSame, [s.x0, s.x1])) g += `<circle cx="${s.sx(x)}" cy="${sy(0)}" r="5" fill="${muted}" stroke="${panel}" stroke-width="2"/>`;
+  g += `<text x="${s.sx(-6.2)}" y="${sy(dSame(-6.2)) - 10}" font-size="12" fill="${muted}">equal variances: a line (1 root)</text>`;
+  g += `<text x="${s.sx(2)}" y="${sy(dDiff(2)) - 12}" text-anchor="middle" font-size="12" font-weight="700" fill="${b}">different variances: a parabola (2 roots)</text>`;
+  document.getElementById('fig3').innerHTML = g;
+}
+
+drawFig1(); drawFig2(); drawFig3();
+document.getElementById('sigmaB').addEventListener('input', drawFig2);
+</script>
+</body>
+</html>

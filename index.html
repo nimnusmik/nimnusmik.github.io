@@ -33,9 +33,7 @@
 
   #mininav { position: fixed; top: 0; left: 0; right: 0; z-index: 90;
     background: rgba(12,12,16,.7); backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--line);
-    transform: translateY(-100%); transition: transform .3s ease; }
-  #mininav.show { transform: translateY(0); }
+    border-bottom: 1px solid var(--line); }
   #mininav .inner { max-width: 960px; margin: 0 auto; padding: 12px 24px;
     display: flex; align-items: center; justify-content: space-between; }
   #mininav .name { font-weight: 800; font-size: 15px; }
@@ -67,6 +65,8 @@
   .links a.primary { background: var(--accent-deep); border-color: var(--accent-deep); color: #fff; }
   .links a:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
   .links a.primary:hover { background: #b30000; color: #fff; }
+  .links a.gold { background: var(--gold); border-color: var(--gold); color: #0c0c10; }
+  .links a.gold:hover { background: #ffd83d; border-color: #ffd83d; color: #0c0c10; }
   .scroll-hint { margin-top: 56px; color: var(--muted); font-size: 13.5px;
     font-family: ui-monospace, "SF Mono", Menlo, monospace; animation: pulse 2s ease-in-out infinite; }
   @keyframes pulse { 0%,100% { opacity: .5; } 50% { opacity: 1; } }
@@ -155,6 +155,7 @@
       <a href="#projects">Projects</a>
       <a href="#side">Side</a>
       <a href="#now">Now</a>
+      <a href="blog/">Tech Blog</a>
       <a class="cta" href="mailto:kimsunmin0227@gmail.com">Contact ↗</a>
     </nav>
   </div>
@@ -174,6 +175,7 @@
         <a href="resume.pdf" target="_blank" rel="noopener">Resume</a>
         <a href="https://www.linkedin.com/in/sunnykimm12/">LinkedIn</a>
         <a href="mailto:kimsunmin0227@gmail.com">Email</a>
+        <a class="gold" href="blog/">Tech Blog</a>
       </div>
       <div class="scroll-hint">▼ scroll — the point will follow</div>
     </div>
@@ -206,14 +208,6 @@
         with quality gates, an API and dashboard on top of it, and an outbound call management platform — mobile app for field sales,
         live admin dashboard for managers — <b>used daily by sales teams</b>.
         Not a class project. A system people depend on.</p>
-    </div>
-  </section>
-
-  <!-- SCENE 3 · PROJECTS -->
-  <section class="scene reveal" id="projects">
-    <div class="scene-inner wrap">
-      <div class="chapter">chapter 03 · the point multiplied</div>
-      <h2>It learned new shapes.</h2>
       <div class="grid stagger">
         <a class="card" href="https://github.com/nimnusmik/onbid-auction-pipeline">
           <span class="arrow">→</span>
@@ -229,6 +223,16 @@
           <p>Outbound-call management system used daily by sales teams: admin web dashboard, agent mobile app, and async backend — built solo, end to end.</p>
           <div class="stack">Django · React · React Native · PostgreSQL · Redis · Docker</div>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 3 · PROJECTS -->
+  <section class="scene reveal" id="projects">
+    <div class="scene-inner wrap">
+      <div class="chapter">chapter 03 · the point multiplied</div>
+      <h2>It learned new shapes.</h2>
+      <div class="grid stagger">
         <a class="card" href="https://github.com/nimnusmik/CV_documents_classification_competition">
           <span class="arrow">→</span>
           <div class="tag">Computer Vision · 🥈 2nd Place</div>
@@ -327,6 +331,7 @@
       <div class="links">
         <a class="primary" href="mailto:kimsunmin0227@gmail.com">Email me</a>
         <a href="resume.pdf" target="_blank" rel="noopener">Resume</a>
+        <a href="blog/">Tech Blog</a>
         <a href="https://www.linkedin.com/in/sunnykimm12/">LinkedIn</a>
         <a href="https://github.com/nimnusmik">GitHub</a>
       </div>
@@ -342,14 +347,12 @@
 
   /* ── progress + nav ── */
   const progress = document.getElementById('progress');
-  const mininav = document.getElementById('mininav');
   function scrollFrac() {
     const h = document.documentElement;
     return h.scrollTop / (h.scrollHeight - h.clientHeight);
   }
   addEventListener('scroll', () => {
     progress.style.width = (scrollFrac() * 100) + '%';
-    mininav.classList.toggle('show', scrollY > innerHeight * 0.7);
   }, { passive: true });
 
   /* ── reveal + countup ── */

@@ -1,0 +1,198 @@
+- generic [ref=f6e4]:
+  - main [ref=f6e6]:
+    - generic [ref=f6e8]:
+      - navigation [ref=f6e11]:
+        - generic [ref=f6e13]:
+          - generic [ref=f6e15]:
+            - generic:
+              - link:
+                - /url: /
+                - generic:
+                  - heading [level=3]
+          - navigation [ref=f6e18]:
+            - list [ref=f6e19]:
+              - listitem [ref=f6e20]:
+                - link "Home" [ref=f6e21] [cursor=pointer]:
+                  - /url: /
+              - listitem [ref=f6e22]:
+                - link "Research" [ref=f6e23] [cursor=pointer]:
+                  - /url: /research
+              - listitem [ref=f6e24]:
+                - link "Talk" [ref=f6e25] [cursor=pointer]:
+                  - /url: /talk
+              - listitem [ref=f6e26]:
+                - link "Teaching" [ref=f6e27] [cursor=pointer]:
+                  - /url: /teaching
+              - listitem [ref=f6e28]:
+                - button "More" [ref=f6e31] [cursor=pointer]
+      - generic [ref=f6e40]:
+        - heading "Bowen Lou" [level=1] [ref=f6e43]
+        - generic [ref=f6e44]:
+          - paragraph [ref=f6e45]
+          - paragraph [ref=f6e46]: Artificial Intelligence
+          - paragraph [ref=f6e47]: Innovation and Entrepreneurship
+          - paragraph [ref=f6e48]: Future of Work
+  - region [ref=f6e50]:
+    - generic [ref=f6e56]:
+      - generic [ref=f6e59]:
+        - paragraph [ref=f6e60]: Bowen Lou is an Assistant Professor of Data Sciences and Operations at the Marshall School of Business, University of Southern California. Professor Lou’s research primarily lies in artificial intelligence (AI), innovation and entrepreneurship, and future of work. Broadly, he is extremely passionate about studying emerging technology-enabled phenomena in business, organizations, and society (including but not limited to topics on AI, big data analytics, digital platform, FinTech, healthcare IT, and social media). He works on the new waves of digitization and technological innovation spanning a wide spectrum of industry sectors, by collaborating with leading analytics companies that track technology, labor and innovation trends. Linking macro patterns to micro activities, his studies leverage a variety of interdisciplinary methodologies (including but not limited to econometrics, machine learning, natural language processing, network analytics, game-theoretic modeling, randomized field experiments, and bio/chem-informatics).
+        - paragraph [ref=f6e61]
+        - paragraph [ref=f6e62]: "Recently his research projects primarily study economics and strategic implications of AI in the following areas:"
+        - paragraph [ref=f6e63]:
+          - generic [ref=f6e64]:
+            - text: 1).
+            - emphasis [ref=f6e65]: AI and Digital Transformation in Organizational Innovation (team/firm level)
+            - text: ": How AI improves innovation (e.g., patenting and product development), or helps mitigate innovation slowdown during key organizational transitions (e.g., CEO turnover, R&D alliances, disruption in team collaboration),"
+        - paragraph [ref=f6e66]:
+          - generic [ref=f6e67]:
+            - text: 2).
+            - emphasis [ref=f6e68]: AI-mediated Digital Platforms as Emerging Organizational Forms (marketplace/ecosystem level)
+            - text: ": How AI influences digital marketplaces by governing information flows and enabling new forms of coordination between platform owners and complementors,"
+        - paragraph [ref=f6e69]:
+          - generic [ref=f6e70]:
+            - text: 3).
+            - emphasis [ref=f6e71]: AI-enabled Digital Entrepreneurship as Transformative Innovation Pathways (individual/venture level)
+            - text: ": How generative AI lowers barriers to entry, strengthens founders’ ability to identify opportunities, and broadens who can successfully launch and grow new ventures,"
+        - paragraph [ref=f6e72]:
+          - generic [ref=f6e73]:
+            - text: 4).
+            - emphasis [ref=f6e74]: AI and Institutional Impact (e.g., from Media and Policy) on Digital Innovation Diffusion (societal level)
+            - text: ": How institutional actors such as media and policymakers affect public attention to AI and guide the diffusion of AI-enabled innovation."
+        - paragraph [ref=f6e75]: "He is also actively expanding his research into other topics related to emerging digital technologies, innovation, and labor markets, including:"
+        - paragraph [ref=f6e76]: 5). Investment behavior and strategy in Bitcoin exchange and mining markets,
+        - paragraph [ref=f6e77]: 6). Multihoming activities of workers in the gig economy,
+        - paragraph [ref=f6e78]: 7). IT-enabled strategy and intervention for business in the area of employer brand management and referral program development.
+        - paragraph [ref=f6e79]
+        - paragraph [ref=f6e80]:
+          - generic [ref=f6e81]:
+            - text: Professor Lou’s research work has been published or forthcoming in premier academic journals such as
+            - emphasis [ref=f6e82]: Management Science
+            - text: ","
+            - emphasis [ref=f6e83]: Information Systems Research
+            - text: ", and"
+            - emphasis [ref=f6e84]: Management Information Systems Quarterly
+            - text: . His dissertation research on data analytics, AI, and innovation was awarded the INFORMS Information Systems Society (ISS) Nunamaker-Chen Best Dissertation Award (Winner) and ACM SIGMIS Dissertation Award (Runner-up). He is also a recipient of the INFORMS ISS Gordon B. Davis Young Scholar Award (Winner), Best IS paper in
+            - emphasis [ref=f6e85]: Management Science
+            - text: (Finalist), Best Paper Award (Finalist) at
+            - emphasis [ref=f6e86]: Workshop on Information Systems and Economics
+            - text: and
+            - emphasis [ref=f6e87]: Conference on Information Systems and Technology
+            - text: ", Best Paper Award (Runner-up) at INFORMS eBusiness, and Best Student Paper Award (Runner-up) at"
+            - emphasis [ref=f6e88]: Conference on Health IT and Analytics
+            - text: ", among other honors and research grants. He co-organizes and chairs the USC Marshall's"
+            - emphasis [ref=f6e89]: AI in Management
+            - text: (AIM)
+            - emphasis [ref=f6e90]: c
+            - text: onference, and previously co-organized and chaired the inaugural and second
+            - emphasis [ref=f6e91]: Wharton Innovation Doctoral Symposium
+            - text: (WINDS), the first multidisciplinary doctoral conference focused on innovation.
+        - paragraph [ref=f6e92]
+        - paragraph [ref=f6e93]: Prior to joining USC Marshall, he was an Assistant Professor of Operations and Information Management at the School of Business, University of Connecticut. He worked in technology and banking corporations including Intel and China Guangfa Bank. He was also a research programmer at Knowledge Lab of Computation Institute in Chicago, digging into an exciting field of computational social science.
+        - paragraph [ref=f6e94]
+        - paragraph [ref=f6e95]: Professor Lou received his Ph.D. in Operations, Information and Decisions (with a specific focus on information strategy & economics), and his M.A. in Statistics from the Wharton School, University of Pennsylvania. He also holds a M.S. in Computer Science from University of Chicago, and a B.Eng in Information Security from Shanghai Jiao Tong University. He is a data scientist, technology advisor and public speaker, frequently delivering his studies and innovation strategies related to emerging technologies.
+        - paragraph [ref=f6e96]
+        - paragraph [ref=f6e97]:
+          - generic [ref=f6e98]:
+            - text: Please contact at
+            - emphasis [ref=f6e99]:
+              - strong [ref=f6e100]: bowenlou at marshall dot usc dot edu
+            - text: for academic-industry research collaboration, media inquiry, and speaking engagement.
+      - generic [ref=f6e102]:
+        - generic:
+          - paragraph
+          - paragraph
+  - region [ref=f6e104]:
+    - generic [ref=f6e110]:
+      - heading "Academic News & Highlights" [level=2] [ref=f6e111]
+      - generic [ref=f6e114]:
+        - paragraph [ref=f6e115]:
+          - generic [ref=f6e116]:
+            - text: •
+            - strong [ref=f6e117]: 2025/10
+            - text: ": Honored to receive INFORMS Information Systems Society (ISS) Gordon B. Davis Young Scholar Award"
+        - paragraph [ref=f6e118]:
+          - generic [ref=f6e119]:
+            - text: •
+            - strong [ref=f6e120]: 2025/10
+            - text: ": Best paper in INFORMS eBusiness (Runner-up)"
+        - paragraph [ref=f6e121]:
+          - generic [ref=f6e122]:
+            - text: •
+            - strong [ref=f6e123]: 2025/8
+            - text: ": Co-organizing the 6th Artificial Intelligence in Management (AIM) Conference in USC Marshall ("
+            - link "https://sites.google.com/view/aimanagement/home" [ref=f6e124] [cursor=pointer]:
+              - /url: https://sites.google.com/view/aimanagement/home
+            - text: )
+        - paragraph [ref=f6e125]:
+          - generic [ref=f6e126]:
+            - text: •
+            - strong [ref=f6e127]: 2025/8
+            - text: ": Paper on \"Artificial Intelligence, CEO Turnover, and Exploration Orientation in Firm Innovation\" got accepted in"
+            - emphasis [ref=f6e128]: Information Systems Research
+        - paragraph [ref=f6e129]:
+          - generic [ref=f6e130]:
+            - strong [ref=f6e131]: • 2024/11
+            - text: ": Recipient of USC Institute for Outlier Research in Business (iORB) Grant that supports the study on market intelligence and product innovation"
+        - paragraph [ref=f6e132]:
+          - generic [ref=f6e133]:
+            - text: •
+            - strong [ref=f6e134]: 2024/7
+            - text: ": Recipient of Mack Institute Research Fellowship and Wharton AI & Analytics Initiative Funding that support the study on artificial intelligence and team Innovation"
+        - paragraph [ref=f6e135]:
+          - generic [ref=f6e136]:
+            - text: •
+            - strong [ref=f6e137]: 2024/6
+            - text: ": Joining USC Marshall"
+        - paragraph [ref=f6e138]:
+          - generic [ref=f6e139]:
+            - text: •
+            - strong [ref=f6e140]: 2022/12
+            - text: ": Best paper in"
+            - emphasis [ref=f6e141]: Workshop on Information Systems and Economics
+            - text: (Finalist)
+        - paragraph [ref=f6e142]:
+          - generic [ref=f6e143]:
+            - text: •
+            - strong [ref=f6e144]: 2022/10
+            - text: ": Best IS paper in"
+            - emphasis [ref=f6e145]: Management Science
+            - text: (Finalist)
+        - paragraph [ref=f6e146]:
+          - generic [ref=f6e147]:
+            - text: •
+            - strong [ref=f6e148]: 2021/12
+            - text: ": Honored to receive ACM SIGMIS Doctoral Dissertation Award (Runner-up)"
+        - paragraph [ref=f6e149]:
+          - generic [ref=f6e150]:
+            - text: •
+            - strong [ref=f6e151]: 2021/10
+            - text: ": Honored to receive INFORMS Information Systems Society (ISS) Nunamaker-Chen Best Dissertation Award (Winner)"
+        - paragraph [ref=f6e152]:
+          - generic [ref=f6e153]:
+            - text: •
+            - strong [ref=f6e154]: 2020/7
+            - text: ": Dissertation on \"Are Ideas Really Harder to Find? Essays on Analytics Driven and Artificial Intelligence Enabled Innovation\" has been successfully defended"
+  - region [ref=f6e156]:
+    - generic [ref=f6e159]:
+      - heading "Social" [level=2] [ref=f6e161]
+      - generic [ref=f6e162]:
+        - link "Facebook Social Link" [ref=f6e163] [cursor=pointer]:
+          - /url: https://www.facebook.com/bowenloubowen
+        - link "LinkedIn Social Link" [ref=f6e168] [cursor=pointer]:
+          - /url: https://www.linkedin.com/in/bowenlou
+        - link "X" [ref=f6e174] [cursor=pointer]:
+          - /url: https://www.x.com/bowenlou
+  - region [ref=f6e179]:
+    - iframe [ref=f6e186]:
+      - link "Visit tracker" [ref=f7e3] [cursor=pointer]:
+        - /url: https://clustrmaps.com/site/1apg
+  - contentinfo [ref=f6e188]:
+    - generic [ref=f6e193]:
+      - generic [ref=f6e194]:
+        - link "Facebook Social Link" [ref=f6e195] [cursor=pointer]:
+          - /url: https://www.facebook.com/bowenloubowen
+        - link "LinkedIn Social Link" [ref=f6e198] [cursor=pointer]:
+          - /url: https://www.linkedin.com/in/bowenlou
+        - link "X" [ref=f6e201] [cursor=pointer]:
+          - /url: https://www.x.com/bowenlou
+      - paragraph [ref=f6e205]: Copyright © Bowen Lou

@@ -1,0 +1,2 @@
+[     197ms] [WARNING] Datadog Browser SDK: service value doesn't meet tag requirements and will be sanitized @ https://classes.usc.edu/main-UEZZED2C.js:0
+[     283ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://classes.usc.edu/bff/user:0

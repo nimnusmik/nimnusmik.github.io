@@ -1,11 +1,19 @@
 # 포트폴리오 사이트 (nimnusmik.github.io)
 
-단일 `index.html` 정적 사이트. master에 푸시하면 GitHub Pages가 1~2분 내 자동 배포.
+정적 사이트 (`index.html` + `blog/`). master에 푸시하면 GitHub Pages가 1~2분 내 자동 배포.
 
 ## 구조 ("Follow the Data" 스크롤 스토리)
-- 히어로 → ch01 Semo → ch02 Global Vision → ch03 Projects(취업용 대표 4개) → ch04 Side Projects(관심사) → ch05 USC → finale
+- 히어로 → ch01 Semo → ch02 Global Vision(Onbid·GV TM 카드 2개 포함) → ch03 Projects → ch04 Side Projects(관심사) → ch05 USC → finale
+- 상단 `#mininav`는 항상 고정 (스크롤 등장 아님). 블로그 페이지들도 같은 바 복사본을 가짐 — 메뉴 바꾸면 세 파일(index, blog/index, 각 글) 동기화.
 - 본문 폭 960px(`.wrap`). 문단에 별도 max-width 걸지 말 것.
 - 카드: `.grid > a.card` (tag / h3 / p / .stack). 새 카드 추가 시 `.stagger.visible > *:nth-child(n)` 딜레이도 개수만큼 확인.
+
+## Tech Blog (`blog/`)
+- 빌드 도구 없음. 글 1개 = 독립 HTML 1개 (`blog/<slug>.html`), 영어.
+- 새 글 절차: ① 기존 글(qda-decision-boundaries.html)을 틀로 복사 ② `blog/index.html`의 `<ul class="posts">` 맨 위에 `<li>` 추가 (title/tag/date).
+- 글 스타일: 다크 단일 테마, 포폴 토큰(레드·골드) 재사용. 그림은 인라인 SVG+JS.
+- 톤: 1인칭 학습 노트 ("내가 이해한 과정"). 과제 답안 통짜 복붙 금지 — 개념 설명 위주로.
+- 글 20~30개 넘으면 태그 필터·검색 추가 (순수 JS).
 
 ## 업데이트 규칙
 - **취업용 프로젝트(ch03)**: 대표작 카드 6개(2열×3) 상한, 교체 우선. 기여가 적은 팀 프로젝트는 카드 대신 아래 `.more` 한 줄 목록에.

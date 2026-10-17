@@ -1,0 +1,145 @@
+- generic [active] [ref=f12e1]:
+  - generic [ref=f12e3]:
+    - banner [ref=f12e4]:
+      - link "Skip to main content" [ref=f12e5] [cursor=pointer]:
+        - /url: /datasets/hcgzsxtcwn/1#main
+      - generic [ref=f12e6]:
+        - link "Mendeley Data homepage" [ref=f12e7] [cursor=pointer]:
+          - /url: /
+        - navigation "utilities" [ref=f12e24]:
+          - list [ref=f12e25]:
+            - listitem [ref=f12e26]:
+              - link [ref=f12e27] [cursor=pointer]:
+                - /url: /faq
+                - img "FAQ" [ref=f12e28]
+        - button "Sign In / Register" [ref=f12e32]
+    - main [ref=f12e33]:
+      - generic [ref=f12e34]:
+        - article [ref=f12e35]:
+          - generic [ref=f12e36]:
+            - 'heading "Replication Package Part 1 for JFE Manuscript: \"Intellectual Property Protection Lost and Competition: An Examination Using Large Language Models\"" [level=1] [ref=f12e37]'
+            - generic [ref=f12e38]:
+              - generic [ref=f12e39]: "Published: 9 May 2026"
+              - generic [ref=f12e40]: "|"
+              - generic [ref=f12e41]: Version 1
+              - generic [ref=f12e42]: "|"
+              - generic [ref=f12e43]: "DOI:"
+              - generic [ref=f12e44]: 10.17632/hcgzsxtcwn.1
+          - generic [ref=f12e45]:
+            - generic [ref=f12e46]: "Contributors:"
+            - generic [ref=f12e47]: Utku Acikalin
+            - text: ","
+            - generic [ref=f12e48]: Tolga Caskurlu
+            - text: ","
+            - button "Gerard Hoberg" [ref=f12e50] [cursor=pointer]
+            - text: ","
+            - generic [ref=f12e52]: gordon phillips
+          - generic [ref=f12e53]:
+            - generic [ref=f12e54]:
+              - heading "Description" [level=2] [ref=f12e55]
+              - paragraph [ref=f12e56]: "Replication Package Part 1 for JFE Manuscript entitled \"Intellectual Property Protection Lost and Competition: An Examination Using Large Language Models.\" There is a Part 2 replication package at this location ( https://data.mendeley.com/drafts/fnk3yp38ws) that contains additional necessary large files for the full replication from the subdirectory, \"Pseudo_Data_JFE_Replication_Package\\Replication_Alice_NEW\\Codes\\ModernBERT\\text_data\\\"."
+            - button "Download All" [disabled] [ref=f12e58]
+            - heading "Files" [level=2] [ref=f12e59]
+            - img "Loading" [ref=f12e61]
+            - generic [ref=f12e66]:
+              - heading "Institutions" [level=2] [ref=f12e67]
+              - list [ref=f12e68]:
+                - listitem [ref=f12e69]:
+                  - generic [ref=f12e70]:
+                    - link "Dartmouth College" [ref=f12e71] [cursor=pointer]:
+                      - /url: https://ror.org/049s0rh22
+                    - generic [ref=f12e72]: New Hampshire, Hanover
+            - generic [ref=f12e73]:
+              - heading "Categories" [level=2] [ref=f12e74]
+              - generic [ref=f12e75]: Artificial Intelligence, Business Economics, Corporate Finance
+            - generic [ref=f12e76]:
+              - heading "Licence" [level=2] [ref=f12e77]
+              - button "Learn more" [ref=f12e78]:
+                - generic: CC BY 4.0
+        - complementary [ref=f12e79]:
+          - generic [ref=f12e80]:
+            - img "Loading"
+            - generic:
+              - link:
+                - /url: https://plu.mx/plum/a/?doi=10.17632/hcgzsxtcwn
+          - img "Loading"
+          - img "Loading"
+          - img "Loading"
+          - img "Loading"
+    - contentinfo [ref=f12e101]:
+      - generic [ref=f12e103]:
+        - img "Digital Commons Data" [ref=f12e104]
+        - generic [ref=f12e124]:
+          - list [ref=f12e125]:
+            - listitem [ref=f12e126]:
+              - link "Home" [ref=f12e127] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=f12e128]:
+              - generic [ref=f12e129]: "|"
+            - listitem [ref=f12e130]:
+              - link "About" [ref=f12e131] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=f12e132]:
+              - generic [ref=f12e133]: "|"
+            - listitem [ref=f12e134]:
+              - link "Accessibility Statement" [ref=f12e135] [cursor=pointer]:
+                - /url: /accessibility
+            - listitem [ref=f12e136]:
+              - generic [ref=f12e137]: "|"
+            - listitem [ref=f12e138]:
+              - link "Archive Policy" [ref=f12e139] [cursor=pointer]:
+                - /url: /archive-process
+            - listitem [ref=f12e140]:
+              - generic [ref=f12e141]: "|"
+            - listitem [ref=f12e142]:
+              - link "File Formats" [ref=f12e143] [cursor=pointer]:
+                - /url: /file-formats
+            - listitem [ref=f12e144]:
+              - generic [ref=f12e145]: "|"
+            - listitem [ref=f12e146]:
+              - link "API Docs" [ref=f12e147] [cursor=pointer]:
+                - /url: /api/docs
+            - listitem [ref=f12e148]:
+              - generic [ref=f12e149]: "|"
+            - listitem [ref=f12e150]:
+              - link "OAI" [ref=f12e151] [cursor=pointer]:
+                - /url: /oai?verb=Identify
+            - listitem [ref=f12e152]:
+              - generic [ref=f12e153]: "|"
+            - listitem [ref=f12e154]:
+              - link "Mission" [ref=f12e155] [cursor=pointer]:
+                - /url: /mission
+            - listitem [ref=f12e156]:
+              - generic [ref=f12e157]: "|"
+            - listitem [ref=f12e158]:
+              - link "Status Updates" [ref=f12e159] [cursor=pointer]:
+                - /url: https://digitalcommons.elsevier.com/status
+          - list [ref=f12e160]:
+            - listitem [ref=f12e161]:
+              - link "Terms of Use" [ref=f12e162] [cursor=pointer]:
+                - /url: https://www.mendeley.com/terms/
+            - listitem [ref=f12e163]:
+              - generic [ref=f12e164]: "|"
+            - listitem [ref=f12e165]:
+              - link "Privacy Policy" [ref=f12e166] [cursor=pointer]:
+                - /url: https://www.elsevier.com/legal/privacy-policy
+            - listitem [ref=f12e167]:
+              - generic [ref=f12e168]: "|"
+            - listitem [ref=f12e169]:
+              - button "Cookie settings" [ref=f12e170] [cursor=pointer]
+          - list [ref=f12e171]:
+            - listitem [ref=f12e172]: "All content on this site: Copyright © 2026 Elsevier inc, its licensors, and contributors. All rights are reserved, including those for text and data mining, AI training and similar technologies. For all open access content, the Creative Commons licensing terms apply."
+  - region "Cookie banner" [ref=f12e174]:
+    - dialog "Privacy" [ref=f12e175]:
+      - generic [ref=f12e177]:
+        - generic [ref=f12e179]:
+          - text: We use cookies that are necessary to make our site work. We may also use additional cookies to analyze, improve, and personalize our content and your digital experience. You can manage your cookie preferences using the
+          - link "Cookie settings" [ref=f12e180] [cursor=pointer]:
+            - /url: "#"
+          - text: link. For more information, see our
+          - link "Cookie Policy, opens in a new tab" [ref=f12e181] [cursor=pointer]:
+            - /url: https://www.elsevier.com/legal/cookienotice
+            - text: Cookie Policy
+        - generic [ref=f12e183]:
+          - button "Cookie settings, Opens the preference center dialog" [ref=f12e184] [cursor=pointer]: Cookie settings
+          - button "Accept all cookies" [ref=f12e185] [cursor=pointer]
