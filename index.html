@@ -82,6 +82,8 @@
   .metric-big .num .sign { color: var(--gold); }
   .metric-big .lbl { color: var(--muted); font-size: 13.5px; margin-top: 6px;
     font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .metric-big .why { color: var(--gold); font-size: 13px; font-style: italic;
+    margin-top: 5px; max-width: 200px; line-height: 1.45; }
 
   .org-chip { display: inline-block; font-family: ui-monospace, "SF Mono", Menlo, monospace;
     font-size: 12.5px; color: var(--gold); border: 1px solid var(--line); border-radius: 999px;
@@ -194,10 +196,14 @@
         With 50+ beta users I ran a <b>hypothesis–experiment–fix loop</b>: 5 hypotheses tested,
         payment pinpointed as the top drop-off, every finding shipped as a prioritized fix.</p>
       <div class="metrics">
-        <div class="metric-big"><div class="num"><span data-count="12">0</span>+</div><div class="lbl">KPIs defined in GA4</div></div>
-        <div class="metric-big"><div class="num"><span data-count="4">0</span></div><div class="lbl">BigQuery SQL reports</div></div>
-        <div class="metric-big"><div class="num"><span data-count="5">0</span></div><div class="lbl">hypotheses tested in beta</div></div>
-        <div class="metric-big"><div class="num"><span data-count="50">0</span>+</div><div class="lbl">beta users in the loop</div></div>
+        <div class="metric-big"><div class="num"><span data-count="12">0</span>+</div><div class="lbl">KPIs defined in GA4</div>
+          <div class="why">I decide what deserves measuring — starting from zero</div></div>
+        <div class="metric-big"><div class="num"><span data-count="4">0</span></div><div class="lbl">BigQuery SQL reports</div>
+          <div class="why">numbers the whole team could pull without asking me</div></div>
+        <div class="metric-big"><div class="num"><span data-count="5">0</span></div><div class="lbl">hypotheses tested in beta</div>
+          <div class="why">opinions became experiments, experiments became fixes</div></div>
+        <div class="metric-big"><div class="num"><span data-count="50">0</span>+</div><div class="lbl">beta users in the loop</div>
+          <div class="why">every decision traced back to real user behavior</div></div>
       </div>
     </div>
   </section>
