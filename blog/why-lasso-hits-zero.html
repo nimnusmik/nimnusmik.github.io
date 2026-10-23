@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><circle cx=%228%22 cy=%228%22 r=%226%22 fill=%22%23ffcc00%22/></svg>">
+<title>Why Lasso Hits Zero — Sunmin Kim</title>
+<meta name="description" content="A penalty shrinks coefficients only if it grows away from zero, and it zeroes them out only if it has a corner at zero. An interactive walk through six penalty shapes.">
+<style>
+  :root {
+    --bg: #0c0c10; --panel: #14141a; --ink: #ececf0; --muted: #9a9aa4;
+    --accent: #ff4444; --accent-deep: #990000; --gold: #ffcc00; --line: #26262e;
+    --blue: #3987e5; --good: #4cc27e;
+    --a-fill: rgba(255,204,0,.13); --b-fill: rgba(255,68,68,.14); --g-fill: rgba(76,194,126,.14);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.75; -webkit-font-smoothing: antialiased;
+    font-size: 16px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px 80px; }
+  header { padding: 110px 0 8px; }
+  #mininav { position: fixed; top: 0; left: 0; right: 0; z-index: 90;
+    background: rgba(12,12,16,.7); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line); }
+  #mininav .inner { max-width: 960px; margin: 0 auto; padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between; }
+  #mininav .name { font-weight: 800; font-size: 15px; color: var(--ink); text-decoration: none; }
+  #mininav .name span { color: var(--accent); }
+  #mininav nav { display: flex; gap: 18px; }
+  #mininav nav a { text-decoration: none; color: var(--muted); font-size: 13.5px; font-weight: 600; }
+  #mininav nav a:hover, #mininav nav a.cta { color: var(--gold); }
+  #mininav nav a.here { color: var(--gold); }
+  @media (max-width: 640px) { #mininav nav a:not(.cta) { display: none; } }
+  .chapter { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px;
+    color: var(--gold); letter-spacing: .18em; text-transform: uppercase; margin: 36px 0 14px; }
+  .chapter::before { content: "── "; color: var(--muted); }
+  h1 { font-size: clamp(30px, 6vw, 42px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 12px; text-wrap: balance; }
+  .lede { font-size: 17px; color: var(--muted); max-width: 62ch; }
+  h2 { font-size: 23px; font-weight: 800; letter-spacing: -0.01em; margin: 52px 0 10px; text-wrap: balance; }
+  p { max-width: 66ch; margin: 12px 0; color: var(--muted); }
+  p b, li b, td b { color: var(--ink); }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .95em; color: var(--ink); white-space: nowrap; }
+  .hl-k { background: linear-gradient(transparent 62%, var(--b-fill) 62%); font-weight: 700; color: var(--ink); }
+  figure { margin: 20px 0 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 10px 6px; }
+  figure svg { display: block; width: 100%; height: auto; }
+  figcaption { font-size: 13.5px; color: var(--muted); padding: 6px 10px 10px; line-height: 1.6; }
+  .formula { background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 14px 18px; margin: 16px 0; overflow-x: auto; font-size: 17px; line-height: 2; color: var(--ink); white-space: nowrap; }
+  .controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 4px 10px 10px; font-size: 14px; color: var(--muted); }
+  .controls label { display: flex; align-items: center; gap: 10px; }
+  input[type=range] { width: min(200px, 50vw); accent-color: var(--accent); }
+  input[type=range]:focus-visible, .pen button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  .readout { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ink); min-width: 44px; }
+  .pen { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 10px 6px; }
+  .pen button { font: 600 13.5px ui-monospace, "SF Mono", Menlo, monospace; color: var(--muted);
+    background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+  .pen button[aria-pressed="true"] { color: var(--bg); background: var(--gold); border-color: var(--gold); }
+  .verdict { font-weight: 700; padding: 2px 10px 10px; font-size: 14.5px; min-height: 2.4em; }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 16px; padding: 0 10px 4px; font-size: 13px; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { display: inline-block; width: 18px; border-top: 2px solid; }
+  .legend i.d { border-top-style: dashed; }
+  .tbl { overflow-x: auto; margin: 16px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; color: var(--muted); }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--ink); font-size: 13px; font-weight: 700; }
+  td:first-child { font-family: ui-monospace, "SF Mono", Menlo, monospace; color: var(--ink); white-space: nowrap; }
+  .yes { color: var(--good); font-weight: 700; } .no { color: var(--accent); font-weight: 700; }
+  .takeaway { border-left: 3px solid var(--gold); background: var(--panel);
+    border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 20px 0; color: var(--ink); }
+  footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--line);
+    font-size: 13.5px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { color: var(--gold); }
+  a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 6px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div id="mininav">
+  <div class="inner">
+    <a class="name" href="../">Sunmin<span>.</span>Kim</a>
+    <nav>
+      <a href="../#semo">Experience</a>
+      <a href="../#projects">Projects</a>
+      <a href="../#side">Side</a>
+      <a href="../#now">Now</a>
+      <a class="here" href="./">Tech Blog</a>
+      <a class="cta" href="mailto:kimsunmin0227@gmail.com">Contact ↗</a>
+    </nav>
+  </div>
+</div>
+<div class="wrap">
+<header>
+  <div class="chapter">regularization · ISLR 6.2 · 2026-10-25</div>
+  <h1>Why Lasso Hits Zero</h1>
+  <p class="lede">I knew the slogan "ridge shrinks, lasso selects," but I could not say why. So I took six candidate penalties, drew each one, and asked two questions about its shape. This note is the picture that finally made it click for me.</p>
+</header>
+
+<h2>The setup</h2>
+<p>Regularized least squares adds a penalty R to the usual error, and λ sets how hard the penalty bites:</p>
+<div class="formula">J(β) = Σ (y<sub>i</sub> − ŷ<sub>i</sub>)² + λ · R(β)</div>
+<p>To see the shape of the problem, I shrank it to <b>one coefficient</b>. With a standardized predictor, the error term is just a parabola centered at the least squares estimate, which I call b:</p>
+<div class="formula">J(β) = (β − b)² + λ · R(β)</div>
+<p>Now every question about R becomes a question about its graph. I only needed two.</p>
+
+<h2>Question 1: does it pull β toward zero?</h2>
+<p>A penalty is a fine for leaving home, where home is β = 0. A sensible fine is <b>smallest at 0 and grows as |β| grows, in both directions</b>. If the fine ever turns negative, it becomes a reward, and the optimizer runs toward the reward instead of home.</p>
+
+<figure>
+  <svg id="fig1" viewBox="0 0 680 300" role="img" aria-label="Absolute value rises on both sides of zero; beta cubed and sine both dip below zero for negative beta."></svg>
+  <figcaption><span style="color:var(--good);font-weight:700">|β|</span> rises on both sides, so it pulls β home. <span style="color:var(--accent);font-weight:700">β³</span> drops forever on the left, so β escapes to −∞. <span style="color:var(--gold);font-weight:700">sin β</span> waves up and down and drags β toward −π/2, not 0.</figcaption>
+</figure>
+
+<h2>Question 2: is there a corner at zero?</h2>
+<p>This is the part I had been missing. Zoom in near β = 0 and compare how much each penalty charges for a <b>tiny</b> coefficient.</p>
+
+<figure>
+  <div class="legend" id="zoomLegend"></div>
+  <svg id="fig2" viewBox="0 0 680 300" role="img" aria-label="Near zero, absolute value and log penalty rise in a V while beta squared and beta to the fourth stay flat."></svg>
+  <figcaption>At β = 0.1, |β| charges 0.1, β² charges 0.01, and β⁴ charges 0.0001. A V-shaped penalty still pushes hard on a tiny β, so the cheapest move is to set it to exactly 0. A round penalty barely notices a tiny β, so it only shrinks.</figcaption>
+</figure>
+
+<p>In slope terms: a corner means the slope stays at ±1 right up to 0, so there is always a constant push toward 0. A smooth bottom means the slope fades to 0 as β → 0, so the push disappears before β gets there.</p>
+
+<h2>Try it: the one-coefficient lab</h2>
+<p>Pick a penalty, then move b (what the data wants) and λ (how strict the penalty is). The dot is the β that actually minimizes J. Start with b = 0.3 and λ = 1, then flip between <span class="mono">|β|</span> and <span class="mono">β⁴</span>.</p>
+
+<figure>
+  <div class="pen" id="pen" role="group" aria-label="Choose a penalty"></div>
+  <div class="controls">
+    <label for="bIn">b <input type="range" id="bIn" min="-2" max="2" step="0.05" value="0.3"><span class="readout" id="bOut">0.30</span></label>
+    <label for="lamIn">λ <input type="range" id="lamIn" min="0" max="3" step="0.05" value="1"><span class="readout" id="lamOut">1.00</span></label>
+  </div>
+  <div class="legend">
+    <span><i style="border-color:var(--gold)"></i>J(β)</span>
+    <span><i class="d" style="border-color:var(--muted)"></i>error (β − b)²</span>
+    <span><i class="d" style="border-color:var(--accent)"></i>penalty λR(β)</span>
+  </div>
+  <svg id="fig3" viewBox="0 0 680 320" role="img" aria-label="Objective function for the chosen penalty with its minimizer marked."></svg>
+  <div class="verdict" id="verdict"></div>
+  <figcaption>With |β| the threshold is λ/2: any b smaller than that in size gets set to exactly 0 (soft thresholding). With β⁴ the minimizer only creeps toward 0.</figcaption>
+</figure>
+
+<h2>The scorecard</h2>
+<div class="tbl">
+<table>
+  <thead><tr><th>R(β)</th><th>Pulls toward 0?</th><th>Corner at 0?</th><th>Why</th></tr></thead>
+  <tbody>
+    <tr><td>β³</td><td class="no">No</td><td>–</td><td>Negative for β &lt; 0, so the minimum runs off to −∞.</td></tr>
+    <tr><td>sin β</td><td class="no">No</td><td>–</td><td>Periodic with negative dips; it pulls β toward −π/2.</td></tr>
+    <tr><td>β⁴</td><td class="yes">Yes</td><td class="no">No</td><td>Grows both ways but is flatter than ridge near 0. Shrinks only.</td></tr>
+    <tr><td>|β|</td><td class="yes">Yes</td><td class="yes">Yes</td><td>Lasso. Constant slope ±1 all the way to 0.</td></tr>
+    <tr><td>ln(1+|β|)</td><td class="yes">Yes</td><td class="yes">Yes</td><td>Acts like |β| near 0, but grows slowly, so large coefficients are shrunk less.</td></tr>
+    <tr><td>‖β‖₀</td><td class="yes">Yes</td><td class="yes">Yes, the strongest</td><td>Costs 1 for any nonzero β. Pure selection (best subset), but discontinuous and hard to optimize.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>One-line takeaway</h2>
+<div class="takeaway">
+  <b>A penalty shrinks if it grows away from 0. It selects only if it has a corner at 0.</b> Lasso hits zero for the same reason a marble stops dead at the bottom of a V but keeps rolling around the bottom of a bowl.
+</div>
+<p>What I'll remember: before trusting any new regularizer, draw it once and look at β = 0.</p>
+
+<footer>
+  <span>Sunmin (Mina) Kim · <a href="../">portfolio</a></span>
+  <span>An Introduction to Statistical Learning, Ch. 6.2</span>
+</footer>
+</div>
+
+<script>
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const fmt = (v, d = 2) => (Object.is(v, -0) ? 0 : v).toFixed(d).replace('-', '−');
+const L0 = b => (b === 0 ? 0 : 1);
+
+/* 공용 그래프: 한 스케일로 축·선·점 배치, 색은 계산된 토큰 값으로 */
+function plot(svg, o) {
+  const W = o.W, H = o.H, pl = o.pl ?? 40, pr = o.pr ?? 16, pt = 16, pb = 28;
+  const [x0, x1] = o.x, [y0, y1] = o.y;
+  const sx = x => pl + (x - x0) / (x1 - x0) * (W - pl - pr);
+  const sy = y => pt + (y1 - y) / (y1 - y0) * (H - pt - pb);
+  const muted = css('--muted'), line = css('--line'), panel = css('--panel');
+  const clip = 'c' + Math.random().toString(36).slice(2);
+  let s = `<defs><clipPath id="${clip}"><rect x="${pl}" y="${pt}" width="${W - pl - pr}" height="${H - pt - pb}"/></clipPath></defs>`;
+  for (const t of o.yt) s += `<line x1="${pl}" x2="${W - pr}" y1="${sy(t)}" y2="${sy(t)}" stroke="${line}"/><text x="${pl - 8}" y="${sy(t) + 4}" text-anchor="end" font-size="11" fill="${muted}">${fmt(t, o.yd ?? 0)}</text>`;
+  for (const t of o.xt) s += `<text x="${sx(t)}" y="${H - 8}" text-anchor="middle" font-size="11" fill="${muted}">${fmt(t, o.xd ?? 0)}</text>`;
+  s += `<line x1="${sx(0)}" x2="${sx(0)}" y1="${pt}" y2="${H - pb}" stroke="${muted}" stroke-opacity=".5"/>`;
+  if (y0 < 0 && y1 > 0) s += `<line x1="${pl}" x2="${W - pr}" y1="${sy(0)}" y2="${sy(0)}" stroke="${muted}" stroke-opacity=".5"/>`;
+  s += `<g clip-path="url(#${clip})">`;
+  const N = 600;
+  for (const se of o.series) {
+    const segs = [[]];
+    for (let i = 0; i <= N; i++) {
+      const x = x0 + (x1 - x0) * i / N;
+      if (se.disc && Math.abs(x) < (x1 - x0) / N / 2) { segs.push([]); continue; }
+      const y = Math.max(Math.min(se.f(x), y1 + 50), y0 - 50);
+      segs[segs.length - 1].push(`${sx(x).toFixed(1)},${sy(y).toFixed(1)}`);
+    }
+    for (const g of segs) if (g.length > 1) s += `<polyline points="${g.join(' ')}" fill="none" stroke="${se.color}" stroke-width="2" stroke-linejoin="round"${se.dash ? ' stroke-dasharray="6 5"' : ''}/>`;
+    if (se.disc) {
+      s += `<circle cx="${sx(0)}" cy="${sy(se.f(1e-9))}" r="4" fill="${panel}" stroke="${se.color}" stroke-width="2"/>`;
+      s += `<circle cx="${sx(0)}" cy="${sy(se.f(0))}" r="4" fill="${se.color}"/>`;
+    }
+  }
+  s += `</g>`;
+  for (const p of (o.points || [])) s += `<circle cx="${sx(p.x)}" cy="${sy(Math.max(Math.min(p.y, y1), y0))}" r="6" fill="${p.color}" stroke="${panel}" stroke-width="2"/>`;
+  for (const l of (o.labels || [])) s += `<text x="${sx(l.x) + (l.dx ?? 6)}" y="${sy(l.y) + 4}" font-size="12" font-weight="700" fill="${l.c}"${l.end ? ' text-anchor="end"' : ''}>${l.t}</text>`;
+  svg.innerHTML = s;
+}
+
+function drawFig1() {
+  const g = css('--good'), r = css('--accent'), y = css('--gold');
+  plot(document.getElementById('fig1'), { W: 680, H: 300, x: [-3, 3], y: [-3, 3], xt: [-3, -2, -1, 0, 1, 2, 3], yt: [-3, -2, -1, 0, 1, 2, 3],
+    series: [{ f: Math.abs, color: g }, { f: x => x ** 3, color: r }, { f: Math.sin, color: y }],
+    labels: [{ x: 2.2, y: 2.75, t: '|β|', c: g }, { x: -1.45, y: -2.75, t: 'β³ → −∞', c: r, end: true, dx: -8 }, { x: -1.57, y: -1.3, t: 'sin β', c: y }] });
+}
+
+function drawFig2() {
+  const Z = [
+    { n: '|β|', f: Math.abs, c: css('--gold') },
+    { n: 'ln(1+|β|)', f: x => Math.log(1 + Math.abs(x)), c: css('--accent') },
+    { n: 'β² (ridge)', f: x => x * x, c: css('--blue'), dash: true },
+    { n: 'β⁴', f: x => x ** 4, c: css('--muted'), dash: true },
+  ];
+  document.getElementById('zoomLegend').innerHTML = Z.map(z => `<span><i${z.dash ? ' class="d"' : ''} style="border-color:${z.c}"></i>${z.n}</span>`).join('');
+  plot(document.getElementById('fig2'), { W: 680, H: 300, pr: 100, x: [-0.5, 0.5], y: [0, 0.5], xt: [-0.5, -0.25, 0, 0.25, 0.5], xd: 2, yt: [0, 0.1, 0.2, 0.3, 0.4, 0.5], yd: 1,
+    series: Z.map(z => ({ f: z.f, color: z.c, dash: z.dash })),
+    labels: [{ x: 0.5, y: 0.49, t: '|β|', c: Z[0].c }, { x: 0.5, y: 0.395, t: 'ln(1+|β|)', c: Z[1].c }, { x: 0.5, y: 0.25, t: 'β²', c: Z[2].c }, { x: 0.5, y: 0.065, t: 'β⁴', c: Z[3].c }] });
+}
+
+const PEN = [
+  { id: 'e', n: '|β|', f: Math.abs, sparse: true },
+  { id: 'f', n: 'β⁴', f: x => x ** 4 },
+  { id: 'b', n: 'ln(1+|β|)', f: x => Math.log(1 + Math.abs(x)), sparse: true },
+  { id: 'c', n: '‖β‖₀', f: L0, disc: true, sparse: true },
+  { id: 'a', n: 'β³', f: x => x ** 3, bad: true },
+  { id: 'd', n: 'sin β', f: Math.sin, bad: true },
+];
+const st = { k: 'e', b: 0.3, lam: 1 };
+const penBox = document.getElementById('pen');
+for (const p of PEN) {
+  const bt = document.createElement('button');
+  bt.type = 'button'; bt.id = 'pen-' + p.id; bt.textContent = p.n;
+  bt.addEventListener('click', () => { st.k = p.id; drawFig3(); });
+  penBox.appendChild(bt);
+}
+const bIn = document.getElementById('bIn'), lamIn = document.getElementById('lamIn');
+bIn.addEventListener('input', () => { st.b = +bIn.value; drawFig3(); });
+lamIn.addEventListener('input', () => { st.lam = +lamIn.value; drawFig3(); });
+
+function drawFig3() {
+  const p = PEN.find(q => q.id === st.k), { b, lam } = st;
+  penBox.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x.id === 'pen-' + p.id)));
+  document.getElementById('bOut').textContent = fmt(b);
+  document.getElementById('lamOut').textContent = fmt(lam);
+  const err = x => (x - b) ** 2, pen = x => lam * p.f(x), J = x => err(x) + pen(x);
+  // ponytail: 격자 탐색(±3, 0.001 간격), 범위 밖 최솟값은 "끝으로 도망"으로만 표시
+  let bx = 0, bv = J(0);
+  for (let i = -3000; i <= 3000; i++) { const x = i / 1000, v = J(x); if (v < bv - 1e-12) { bv = v; bx = x; } }
+  const lo = Math.min(bv, 0) - 0.4, hi = Math.max(bv, 0) + 5, step = hi - lo > 6 ? 2 : 1, yt = [];
+  for (let t = Math.ceil(lo / step) * step; t <= hi; t += step) yt.push(t);
+  const gold = css('--gold');
+  plot(document.getElementById('fig3'), { W: 680, H: 320, x: [-3, 3], y: [lo, hi], xt: [-3, -2, -1, 0, 1, 2, 3], yt,
+    series: [{ f: err, color: css('--muted'), dash: true }, { f: pen, color: css('--accent'), dash: true, disc: p.disc }, { f: J, color: gold, disc: p.disc }],
+    points: [{ x: bx, y: bv, color: gold }] });
+  const v = document.getElementById('verdict');
+  let msg, c = css('--ink');
+  if (lam === 0) msg = `No penalty: β stays at b = ${fmt(b)}.`;
+  else if (p.id === 'a') { msg = `β³ keeps falling to the left. Inside this window the minimum is β = ${fmt(bx)}, but widen the window and it runs further. The true minimum is at −∞.`; c = css('--accent'); }
+  else if (Math.abs(bx) >= 2.999) { msg = `β was dragged to the edge (${fmt(bx)}). This penalty does not pull toward 0.`; c = css('--accent'); }
+  else if (p.id === 'd' && bx !== 0 && Math.sign(bx) !== Math.sign(b)) { msg = `β was pulled to the other side (${fmt(bx, 3)}). The negative dip of sin is doing the pulling.`; c = css('--accent'); }
+  else if (bx === 0) { msg = `β is exactly 0. This feature is dropped from the model.`; c = css('--good'); }
+  else if (p.id === 'd') { msg = `β = ${fmt(bx, 3)} for now. Make b negative or raise λ and watch it jump toward −π/2 ≈ −1.57.`; c = css('--accent'); }
+  else msg = `β shrank from ${fmt(b)} to ${fmt(bx, 3)}, but it is not 0.` + (p.sparse ? ' Raise λ a bit and it snaps to 0.' : ' It never snaps to 0 unless b = 0.');
+  v.textContent = msg; v.style.color = c;
+}
+
+drawFig1(); drawFig2(); drawFig3();
+</script>
+</body>
+</html>
