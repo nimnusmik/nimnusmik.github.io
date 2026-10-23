@@ -10,7 +10,7 @@
 
 ## Tech Blog (`blog/`)
 - 빌드 도구 없음. 글 1개 = 독립 HTML 1개 (`blog/<slug>.html`), 영어.
-- 새 글 절차: ① 기존 글(qda-decision-boundaries.html)을 틀로 복사 ② `blog/index.html`의 `<ul class="posts">` 맨 위에 `<li>` 추가 (title/tag/date).
+- 새 글 절차: ① 기존 글(qda-decision-boundaries.html)을 틀로 복사 ② `blog/index.html`의 `<ul class="posts">` 맨 아래에 `<li>` 추가 (오래된 글이 위, 새 글이 아래) (title/tag/date).
 - 글 스타일: 다크 단일 테마, 포폴 토큰(레드·골드) 재사용. 그림은 인라인 SVG+JS.
 - 톤: 1인칭 학습 노트 ("내가 이해한 과정"). 과제 답안 통짜 복붙 금지 — 개념 설명 위주로.
 - 글 20~30개 넘으면 태그 필터·검색 추가 (순수 JS).
