@@ -78,6 +78,9 @@
   /* metric billboard */
   .metrics { display: flex; gap: 28px; margin: 30px 0 8px; flex-wrap: wrap; }
   .metric-big { font-variant-numeric: tabular-nums; }
+  .metrics.four { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+  .metrics.four .metric-big .num { font-size: 44px; white-space: nowrap; }
+  @media (max-width: 760px) { .metrics.four { grid-template-columns: 1fr 1fr; } .metrics.four .metric-big .num { font-size: 36px; } }
   .metric-big .num { font-size: 58px; font-weight: 800; color: var(--accent); line-height: 1; }
   .metric-big .num .sign { color: var(--gold); }
   .metric-big .lbl { color: var(--muted); font-size: 13.5px; margin-top: 6px;
@@ -157,7 +160,7 @@
   <div class="inner">
     <div class="name">Sunmin<span>.</span>Kim</div>
     <nav>
-      <a href="#semo">Experience</a>
+      <a href="#gv">Experience</a>
       <a href="#projects">Projects</a>
       <a href="#side">Side</a>
       <a href="#now">Now</a>
@@ -187,43 +190,27 @@
     </div>
   </section>
 
-  <!-- SCENE 1 · SEMO -->
-  <section class="scene reveal" id="semo">
-    <div class="scene-inner wrap">
-      <div class="chapter">chapter 01 · the point gets measured</div>
-      <div class="org-chip">Semo — AI agent startup · Analytics Lead Intern · Sep–Dec 2025</div>
-      <h2>First, it became a metric.</h2>
-      <p class="body">Semo's AI diagnostic platform was live, but nobody could see it in numbers.
-        I wrote the <b>GA4 event spec from a blank page</b> and turned it into 12+ KPIs on an executive
-        Looker Studio dashboard, then built <b>BigQuery reporting</b> on the raw export — D7 retention,
-        payment conversion, time on page — so getting an answer took a query, not a meeting.
-        With 50+ beta users I ran a <b>hypothesis–experiment–fix loop</b>: 4 hypotheses tested,
-        payment pinpointed as the top drop-off, every finding shipped as a prioritized fix.</p>
-      <div class="metrics">
-        <div class="metric-big"><div class="num"><span data-count="12">0</span>+</div><div class="lbl">KPIs defined in GA4</div>
-          <div class="why">I decide what deserves measuring — starting from zero</div></div>
-        <div class="metric-big"><div class="num"><span data-count="4">0</span></div><div class="lbl">BigQuery SQL reports</div>
-          <div class="why">numbers the whole team could pull without asking me</div></div>
-        <div class="metric-big"><div class="num"><span data-count="4">0</span></div><div class="lbl">hypotheses tested in beta</div>
-          <div class="why">opinions became experiments, experiments became fixes</div></div>
-        <div class="metric-big"><div class="num"><span data-count="50">0</span>+</div><div class="lbl">beta users in the loop</div>
-          <div class="why">every decision traced back to real user behavior</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SCENE 2 · GLOBAL VISION -->
+  <!-- SCENE 1 · GLOBAL VISION -->
   <section class="scene reveal" id="gv">
     <div class="scene-inner wrap">
-      <div class="chapter">chapter 02 · the point went to work</div>
+      <div class="chapter">chapter 01 · the point goes to work</div>
       <div class="org-chip">Global Vision — manufacturing · Data Engineer, Data Platform &amp; BI · Jan–Jul 2026</div>
-      <h2>Then, it shipped to production.</h2>
-      <p class="body">At Global Vision I built internal data systems <b>end-to-end</b>: a daily ETL pipeline
-        with quality gates, an API and dashboard on top of it, and an outbound call management platform — mobile app for field sales,
-        live admin dashboard for managers — <b>used daily by sales teams</b>.
-        Not a class project. A system people depend on.
+      <h2>It runs in production, every day.</h2>
+      <p class="body">A colleague at Global Vision spent <b>3 hours a day</b> searching a government auction site by hand.
+        I built the company's <b>first data pipeline</b>, alone: a daily ETL with a quality gate, an API, and a dashboard that ranks
+        every listing against real sale prices. I also built the sales team's call management platform, web and Android.
         The pipeline still runs every day: <a href="https://onbid-demo.onrender.com" target="_blank" rel="noopener" style="color:var(--gold)">open the live read-only demo ↗</a>
         <span style="color:var(--muted)">(free hosting, first load can take about a minute)</span>.</p>
+      <div class="metrics four">
+        <div class="metric-big"><div class="num"><span data-count="3">0</span>h → 0</div><div class="lbl">daily manual search</div>
+          <div class="why">the reason the pipeline exists</div></div>
+        <div class="metric-big"><div class="num"><span data-count="3">0</span>K+</div><div class="lbl">listings refreshed daily</div>
+          <div class="why">from 2 government APIs, 5 stages, one quality gate</div></div>
+        <div class="metric-big"><div class="num"><span data-count="490">0</span>K+</div><div class="lbl">real sale prices matched</div>
+          <div class="why">so "cheap" is a number, not a feeling</div></div>
+        <div class="metric-big"><div class="num"><span data-count="208">0</span>/210</div><div class="lbl">daily runs completed</div>
+          <div class="why">it kept running after I left</div></div>
+      </div>
       <div class="grid stagger">
         <div class="card">
           <div class="tag">Data Engineering · Global Vision</div>
@@ -239,6 +226,27 @@
           <div class="stack">Django · React · React Native · PostgreSQL · Redis · Docker</div>
           <div class="card-links"><a href="https://youtu.be/kht4BrjXxxQ" target="_blank" rel="noopener">Video ↗</a><a href="https://github.com/nimnusmik/gvms_TM" target="_blank" rel="noopener">Code ↗</a></div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 2 · SEMO -->
+  <section class="scene reveal" id="semo">
+    <div class="scene-inner wrap">
+      <div class="chapter">chapter 02 · where the point was first measured</div>
+      <div class="org-chip">Semo — AI agent startup · Analytics Lead Intern · Sep–Dec 2025</div>
+      <h2>Before that, it became a metric.</h2>
+      <p class="body">Semo's AI diagnostic platform was live, but nobody could see it in numbers.
+        I wrote the <b>GA4 event spec from a blank page</b> and checked the developers' implementation, then built
+        <b>BigQuery reporting</b> on the raw export (retention, payment conversion) behind a Looker Studio dashboard
+        the executives read every week. In beta I tested 4 hypotheses and turned the findings into prioritized fixes.</p>
+      <div class="metrics">
+        <div class="metric-big"><div class="num"><span data-count="4">0</span></div><div class="lbl">BigQuery SQL reports</div>
+          <div class="why">answers took a query, not a meeting</div></div>
+        <div class="metric-big"><div class="num"><span data-count="3">0</span></div><div class="lbl">executives reading it weekly</div>
+          <div class="why">a dashboard only counts if someone opens it</div></div>
+        <div class="metric-big"><div class="num"><span data-count="4">0</span></div><div class="lbl">hypotheses tested in beta</div>
+          <div class="why">opinions became experiments, experiments became fixes</div></div>
       </div>
     </div>
   </section>

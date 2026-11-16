@@ -3,7 +3,7 @@
 정적 사이트 (`index.html` + `blog/`). master에 푸시하면 GitHub Pages가 1~2분 내 자동 배포.
 
 ## 구조 ("Follow the Data" 스크롤 스토리)
-- 히어로 → ch01 Semo → ch02 Global Vision(Onbid·GV TM 카드 2개 포함) → ch03 Projects → ch04 Side Projects(관심사) → ch05 USC → finale
+- 히어로 → ch01 Global Vision(가장 강한 경력을 맨 앞에, 큰 숫자 4개 + Onbid·GV TM 카드) → ch02 Semo → ch03 Projects → ch04 Side Projects(관심사) → ch05 USC → finale
 - 상단 `#mininav`는 항상 고정 (스크롤 등장 아님). 블로그 페이지들도 같은 바 복사본을 가짐 — 메뉴 바꾸면 세 파일(index, blog/index, 각 글) 동기화.
 - 본문 폭 960px(`.wrap`). 문단에 별도 max-width 걸지 말 것.
 - 카드: `.grid > div.card` (tag / h3 / p / .stack / .card-links). 카드 전체가 링크가 아니라, 맨 아래 `.card-links`에 버튼을 여러 개 둠. 순서는 Live → Case study PDF → Video(YouTube) → Code, 있는 것만 넣고 첫 버튼이 강조색. PDF는 `case-studies/`에 둠. 새 카드 추가 시 `.stagger.visible > *:nth-child(n)` 딜레이도 개수만큼 확인.
