@@ -225,7 +225,7 @@
           <span class="arrow">→</span>
           <div class="tag">Data Engineering · Global Vision</div>
           <h3>Onbid Auction Pipeline</h3>
-          <p>Daily ETL for Korea's public-asset auction Open API: a quality gate that halts bad runs, a web backfill that restored 17K bid rounds the API deletes, and tiered matching to 490K+ real-transaction prices. Runs daily on GitHub Actions.</p>
+          <p>It started with one person spending 3 hours a day searching by hand. Now a daily 5-stage ETL does it overnight: a quality gate that halts bad runs, a web backfill that restored 17K bid rounds the API deletes, and tiered matching to 490K+ real-transaction prices. 208 of 210 daily runs completed.</p>
           <div class="stack">Python · SQLite · Flask · Next.js · Docker · GitHub Actions</div>
         </a>
         <a class="card" href="https://github.com/nimnusmik/gvms_TM">
@@ -236,6 +236,7 @@
           <div class="stack">Django · React · React Native · PostgreSQL · Redis · Docker</div>
         </a>
       </div>
+      <p class="more">Case study (PDF, 13 pages): <a href="case-studies/onbid-auction-pipeline.pdf" target="_blank" rel="noopener">how the Onbid pipeline and dashboard work, feature by feature</a></p>
     </div>
   </section>
 
@@ -245,6 +246,13 @@
       <div class="chapter">chapter 03 · the point multiplied</div>
       <h2>It learned new shapes.</h2>
       <div class="grid stagger">
+        <a class="card" href="https://nimnusmik.github.io/echo-rings/">
+          <span class="arrow">→</span>
+          <div class="tag">Graph Data · Hackathon · Live Explorer</div>
+          <h3>Echo Rings: Coordinated Posting on a Graph</h3>
+          <p>129K stock-board posts turned into a graph that links accounts posting the same sentences and group-chat invites. 553 accounts fall into one connected ring. The explorer runs the graph database in your browser, and an MCP server lets an AI agent query the evidence.</p>
+          <div class="stack">Python · Cypher · Relate · WebAssembly · MCP</div>
+        </a>
         <a class="card" href="https://github.com/nimnusmik/CV_documents_classification_competition">
           <span class="arrow">→</span>
           <div class="tag">Computer Vision · 🥈 2nd Place</div>
@@ -261,17 +269,17 @@
         </a>
         <a class="card" href="https://github.com/nimnusmik/toss-ad-click-prediction">
           <span class="arrow">→</span>
-          <div class="tag">Enterprise Data · ML</div>
-          <h3>CTR Prediction — Toss</h3>
-          <p>Click-through-rate prediction on real fintech marketing data: feature engineering and gradient boosting at scale.</p>
-          <div class="stack">Python · XGBoost · CatBoost</div>
+          <div class="tag">Ad CTR · Top 10% · Team Lead</div>
+          <h3>CTR Prediction, Toss ML Next Challenge</h3>
+          <p>Team lead of three. Ranked 70th of about 700 teams on 10M+ rows of ad data with a 1:52 class imbalance: a chunked Polars preprocessing pipeline and a DCN-v3 model, tracked in W&amp;B.</p>
+          <div class="stack">Python · Polars · PyTorch · W&amp;B</div>
         </a>
         <a class="card" href="https://github.com/nimnusmik/mlops-project-mlops-5">
           <span class="arrow">→</span>
-          <div class="tag">Data Engineering · MLOps · Team Lead</div>
+          <div class="tag">Data Engineering · MLOps</div>
           <h3>MLOps Movie Recommendation</h3>
-          <p>Team lead. End-to-end service: scheduled ingestion, experiment tracking, model serving, web front — deployed on AWS.</p>
-          <div class="stack">Airflow · Docker · MLflow · FastAPI</div>
+          <p>Team of four. I owned the data layer: TMDB API ingestion, PostgreSQL schema design, and S3 Parquet backups, inside an Airflow pipeline that automates training and inference on AWS.</p>
+          <div class="stack">Airflow · PostgreSQL · MLflow · FastAPI · AWS</div>
         </a>
       </div>
       <p class="more">More: <a href="https://github.com/nimnusmik/SeoulMetro-Deficit-Solution">Seoul Metro Deficit Analysis</a> (K-Means station clustering, fare-policy proposal) ·
@@ -290,8 +298,8 @@
           <span class="arrow">→</span>
           <div class="tag">Live Product · Gen AI</div>
           <h3>Idala — AI Nail Art Studio</h3>
-          <p>Upload 1–3 inspiration photos and get a monthly nail-art concept collage — image generation pipeline shipped as a live mobile web app.</p>
-          <div class="stack">Next.js · Gemini · Redis · Neon</div>
+          <p>Drop in photos you love, get three press-on nail sets, then see the one you pick on a photo of your own hand. A vision model inspects every set before you see it, and 419 automated tests guard the pipeline.</p>
+          <div class="stack">Next.js · TypeScript · Postgres · Redis · Meta SAM</div>
         </a>
         <a class="card" href="https://yzrecipe.com">
           <span class="arrow">→</span>
@@ -304,8 +312,8 @@
           <span class="arrow">→</span>
           <div class="tag">Research · Market Data</div>
           <h3>StockMind — Do Comments Move Stocks?</h3>
-          <p>A stock-market test of a Polymarket study: 80K Yahoo Finance posts vs. price moves across 15 tickers, with time-split evaluation and bootstrap confidence intervals. Comments carry a weak signal — trading history still wins.</p>
-          <div class="stack">Python · RoBERTa · yfinance · scikit-learn</div>
+          <p>An hourly feed of 100K+ Yahoo Finance posts on 15 tickers with retries, backfill, and row-count checks, then 16 experiments with time-split evaluation and bootstrap confidence intervals. The honest result: posts add no signal beyond trading history.</p>
+          <div class="stack">Python · SQL · XGBoost · yfinance</div>
         </a>
         <a class="card" href="https://github.com/nimnusmik/myquant">
           <span class="arrow">→</span>
@@ -315,6 +323,7 @@
           <div class="stack">Python · stdlib core · yfinance · optional LLM</div>
         </a>
       </div>
+      <p class="more">Case study (PDF, 10 pages): <a href="case-studies/idala.pdf" target="_blank" rel="noopener">how idala works and what was hard</a></p>
     </div>
   </section>
 
@@ -325,11 +334,11 @@
       <h2>Sharpening the toolkit.</h2>
       <p class="body">M.S. in <b>Applied Data Science at USC</b> (2026–2028) — data infrastructure, large-scale ML,
         and everything in between. 🏆 Minister of SMEs and Startups Award, Korea (2023) ·
-        🎓 B.A. AI Convergence (Business AI), HUFS.</p>
+        🎓 B.B.A. Global Business and Technology with a double major in AI Convergence, HUFS. Valedictorian (1 of 200+).</p>
       <div class="skills">
         <span>Python</span><span>SQL</span><span>BigQuery</span><span>GA4</span>
         <span>Looker Studio</span><span>Airflow</span><span>GitHub Actions</span><span>Docker</span><span>MLflow</span>
-        <span>PostgreSQL</span><span>FastAPI</span><span>scikit-learn</span><span>PyTorch</span><span>Transformers</span><span>AWS</span><span>R</span>
+        <span>PostgreSQL</span><span>FastAPI</span><span>scikit-learn</span><span>PyTorch</span><span>Transformers</span><span>AWS</span><span>Celery</span>
       </div>
     </div>
   </section>
