@@ -102,6 +102,10 @@
   .card p { font-size: 13.8px; color: var(--muted); }
   .card .stack { margin-top: 12px; font-size: 12px; color: var(--muted);
     font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .card-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .card-links a { font-size: 12.5px; font-weight: 600; padding: 6px 11px; border-radius: 8px; border: 1px solid var(--line); color: var(--ink); text-decoration: none; transition: border-color .15s ease, color .15s ease; }
+  .card-links a:first-child { border-color: var(--gold); color: var(--gold); }
+  .card-links a:hover, .card-links a:focus-visible { border-color: var(--accent); color: var(--accent); }
   .card .arrow { float: right; color: var(--accent); opacity: 0; transform: translateX(-6px); transition: all .2s ease; }
   .more { margin-top: 18px; font-size: 13.5px; color: var(--muted); }
   .more a { color: var(--accent); }
@@ -221,22 +225,21 @@
         The pipeline still runs every day: <a href="https://onbid-demo.onrender.com" target="_blank" rel="noopener" style="color:var(--gold)">open the live read-only demo ↗</a>
         <span style="color:var(--muted)">(free hosting, first load can take about a minute)</span>.</p>
       <div class="grid stagger">
-        <a class="card" href="https://github.com/nimnusmik/onbid-auction-pipeline">
-          <span class="arrow">→</span>
+        <div class="card">
           <div class="tag">Data Engineering · Global Vision</div>
           <h3>Onbid Auction Pipeline</h3>
           <p>It started with one person spending 3 hours a day searching by hand. Now a daily 5-stage ETL does it overnight: a quality gate that halts bad runs, a web backfill that restored 17K bid rounds the API deletes, and tiered matching to 490K+ real-transaction prices. 208 of 210 daily runs completed.</p>
           <div class="stack">Python · SQLite · Flask · Next.js · Docker · GitHub Actions</div>
-        </a>
-        <a class="card" href="https://github.com/nimnusmik/gvms_TM">
-          <span class="arrow">→</span>
+          <div class="card-links"><a href="https://onbid-demo.onrender.com" target="_blank" rel="noopener">Live demo ↗</a><a href="case-studies/onbid-auction-pipeline.pdf" target="_blank" rel="noopener">Case study PDF ↗</a><a href="https://github.com/nimnusmik/onbid-auction-pipeline" target="_blank" rel="noopener">Code ↗</a></div>
+        </div>
+        <div class="card">
           <div class="tag">Full-Stack · In Production</div>
           <h3>GV TM — Call Management Platform</h3>
           <p>Outbound-call management system used daily by sales teams: admin web dashboard, agent mobile app, and async backend — built solo, end to end.</p>
           <div class="stack">Django · React · React Native · PostgreSQL · Redis · Docker</div>
-        </a>
+          <div class="card-links"><a href="https://github.com/nimnusmik/gvms_TM" target="_blank" rel="noopener">Code ↗</a></div>
+        </div>
       </div>
-      <p class="more">Case study (PDF, 13 pages): <a href="case-studies/onbid-auction-pipeline.pdf" target="_blank" rel="noopener">how the Onbid pipeline and dashboard work, feature by feature</a></p>
     </div>
   </section>
 
@@ -246,41 +249,41 @@
       <div class="chapter">chapter 03 · the point multiplied</div>
       <h2>It learned new shapes.</h2>
       <div class="grid stagger">
-        <a class="card" href="https://nimnusmik.github.io/echo-rings/">
-          <span class="arrow">→</span>
+        <div class="card">
           <div class="tag">Graph Data · Hackathon · Live Explorer</div>
           <h3>Echo Rings: Coordinated Posting on a Graph</h3>
           <p>129K stock-board posts turned into a graph that links accounts posting the same sentences and group-chat invites. 553 accounts fall into one connected ring. The explorer runs the graph database in your browser, and an MCP server lets an AI agent query the evidence.</p>
           <div class="stack">Python · Cypher · Relate · WebAssembly · MCP</div>
-        </a>
-        <a class="card" href="https://github.com/nimnusmik/CV_documents_classification_competition">
-          <span class="arrow">→</span>
+          <div class="card-links"><a href="https://nimnusmik.github.io/echo-rings/" target="_blank" rel="noopener">Live explorer ↗</a><a href="https://github.com/nimnusmik/echo-rings" target="_blank" rel="noopener">Code ↗</a></div>
+        </div>
+        <div class="card">
           <div class="tag">Computer Vision · 🥈 2nd Place</div>
           <h3>Document Image Classification</h3>
           <p>Team lead. 17-class document classification with an Optuna-tuned ensemble of ConvNeXt, EfficientNet, and Swin plus TTA — F1 0.97+, 2nd place overall.</p>
           <div class="stack">PyTorch · Optuna · ConvNeXt · TTA</div>
-        </a>
-        <a class="card" href="https://github.com/nimnusmik/NLP-summary-competition">
-          <span class="arrow">→</span>
+          <div class="card-links"><a href="https://github.com/nimnusmik/CV_documents_classification_competition" target="_blank" rel="noopener">Code ↗</a></div>
+        </div>
+        <div class="card">
           <div class="tag">NLP · 🥉 3rd Place</div>
           <h3>Dialogue Summarization</h3>
           <p>Team lead of six. Summarized 12K everyday dialogues, scored on ROUGE: fine-tuned KoBART/T5 with LLM-based data augmentation and Optuna tuning.</p>
           <div class="stack">PyTorch · Transformers · KoBART · Solar API</div>
-        </a>
-        <a class="card" href="https://github.com/nimnusmik/toss-ad-click-prediction">
-          <span class="arrow">→</span>
+          <div class="card-links"><a href="https://github.com/nimnusmik/NLP-summary-competition" target="_blank" rel="noopener">Code ↗</a></div>
+        </div>
+        <div class="card">
           <div class="tag">Ad CTR · Top 10% · Team Lead</div>
           <h3>CTR Prediction, Toss ML Next Challenge</h3>
           <p>Team lead of three. Ranked 70th of about 700 teams on 10M+ rows of ad data with a 1:52 class imbalance: a chunked Polars preprocessing pipeline and a DCN-v3 model, tracked in W&amp;B.</p>
           <div class="stack">Python · Polars · PyTorch · W&amp;B</div>
-        </a>
-        <a class="card" href="https://github.com/nimnusmik/mlops-project-mlops-5">
-          <span class="arrow">→</span>
+          <div class="card-links"><a href="https://github.com/nimnusmik/toss-ad-click-prediction" target="_blank" rel="noopener">Code ↗</a></div>
+        </div>
+        <div class="card">
           <div class="tag">Data Engineering · MLOps</div>
           <h3>MLOps Movie Recommendation</h3>
           <p>Team of four. I owned the data layer: TMDB API ingestion, PostgreSQL schema design, and S3 Parquet backups, inside an Airflow pipeline that automates training and inference on AWS.</p>
           <div class="stack">Airflow · PostgreSQL · MLflow · FastAPI · AWS</div>
-        </a>
+          <div class="card-links"><a href="https://github.com/nimnusmik/mlops-project-mlops-5" target="_blank" rel="noopener">Code ↗</a></div>
+        </div>
       </div>
       <p class="more">More: <a href="https://github.com/nimnusmik/SeoulMetro-Deficit-Solution">Seoul Metro Deficit Analysis</a> (K-Means station clustering, fare-policy proposal) ·
         <a href="https://github.com/nimnusmik/langchainproject">Commerce Marketing AI Agent</a> (LangChain · FastAPI · SQLite FTS5 RAG)</p>
@@ -294,36 +297,35 @@
       <h2>Off the clock, it still ships.</h2>
       <p class="body">Things I build for fun — live, real users, zero deadlines.</p>
       <div class="grid stagger">
-        <a class="card" href="https://nailspo.vercel.app">
-          <span class="arrow">→</span>
+        <div class="card">
           <div class="tag">Live Product · Gen AI</div>
           <h3>Idala — AI Nail Art Studio</h3>
           <p>Drop in photos you love, get three press-on nail sets, then see the one you pick on a photo of your own hand. A vision model inspects every set before you see it, and 419 automated tests guard the pipeline.</p>
           <div class="stack">Next.js · TypeScript · Postgres · Redis · Meta SAM</div>
-        </a>
-        <a class="card" href="https://yzrecipe.com">
-          <span class="arrow">→</span>
+          <div class="card-links"><a href="https://nailspo.vercel.app" target="_blank" rel="noopener">Live app ↗</a><a href="case-studies/idala.pdf" target="_blank" rel="noopener">Case study PDF ↗</a><a href="https://github.com/nimnusmik/E-dal-art" target="_blank" rel="noopener">Code ↗</a></div>
+        </div>
+        <div class="card">
           <div class="tag">Live Product · Data Pipeline</div>
           <h3>yzrecipe — Viral Recipe Tracker</h3>
           <p>Fully automated pipeline tracking Korea's trending recipes: scheduled collection every 3 hours, two-speed curation, zero-ops static publishing.</p>
           <div class="stack">Python · launchd · Gemini · Static Site</div>
-        </a>
-        <a class="card" href="https://github.com/nimnusmik/StockMind">
-          <span class="arrow">→</span>
+          <div class="card-links"><a href="https://yzrecipe.com" target="_blank" rel="noopener">Live site ↗</a></div>
+        </div>
+        <div class="card">
           <div class="tag">Research · Market Data</div>
           <h3>StockMind — Do Comments Move Stocks?</h3>
           <p>An hourly feed of 100K+ Yahoo Finance posts on 15 tickers with retries, backfill, and row-count checks, then 16 experiments with time-split evaluation and bootstrap confidence intervals. The honest result: posts add no signal beyond trading history.</p>
           <div class="stack">Python · SQL · XGBoost · yfinance</div>
-        </a>
-        <a class="card" href="https://github.com/nimnusmik/myquant">
-          <span class="arrow">→</span>
+          <div class="card-links"><a href="https://github.com/nimnusmik/StockMind" target="_blank" rel="noopener">Code ↗</a></div>
+        </div>
+        <div class="card">
           <div class="tag">Research Tool · Quant</div>
           <h3>myquant — Rule-Based Quant Agent</h3>
           <p>A deterministic stock-strategy research tool rebuilt from TradingAgents and ai-hedge-fund: hybrid single-ticker agent, walk-forward validation, cross-sectional long-short — stdlib only, LLM optional.</p>
           <div class="stack">Python · stdlib core · yfinance · optional LLM</div>
-        </a>
+          <div class="card-links"><a href="https://github.com/nimnusmik/myquant" target="_blank" rel="noopener">Code ↗</a></div>
+        </div>
       </div>
-      <p class="more">Case study (PDF, 10 pages): <a href="case-studies/idala.pdf" target="_blank" rel="noopener">how idala works and what was hard</a></p>
     </div>
   </section>
 
