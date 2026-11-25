@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><circle cx=%228%22 cy=%228%22 r=%226%22 fill=%22%23ffcc00%22/></svg>">
+<title>How I Made a Try-On API Put Each Nail on the Right Finger · Sunmin Kim</title>
+<meta name="description" content="Building idala, an AI nail design app: image models that draw every word literally, and a per-finger pipeline that makes the YouCam try-on API put each nail on the right finger.">
+<style>
+  :root {
+    --bg: #0c0c10; --panel: #14141a; --ink: #ececf0; --muted: #9a9aa4;
+    --accent: #ff4444; --accent-deep: #990000; --gold: #ffcc00; --line: #26262e;
+    --a-fill: rgba(255,204,0,.13); --b-fill: rgba(255,68,68,.14);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.75; -webkit-font-smoothing: antialiased;
+    font-size: 16px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px 80px; }
+  header { padding: 110px 0 8px; }
+  #mininav { position: fixed; top: 0; left: 0; right: 0; z-index: 90;
+    background: rgba(12,12,16,.7); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line); }
+  #mininav .inner { max-width: 960px; margin: 0 auto; padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between; }
+  #mininav .name { font-weight: 800; font-size: 15px; color: var(--ink); text-decoration: none; }
+  #mininav .name span { color: var(--accent); }
+  #mininav nav { display: flex; gap: 18px; }
+  #mininav nav a { text-decoration: none; color: var(--muted); font-size: 13.5px; font-weight: 600; }
+  #mininav nav a:hover, #mininav nav a.cta { color: var(--gold); }
+  #mininav nav a.here { color: var(--gold); }
+  @media (max-width: 640px) { #mininav nav a:not(.cta) { display: none; } }
+  .chapter { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px;
+    color: var(--gold); letter-spacing: .18em; text-transform: uppercase; margin: 36px 0 14px; }
+  .chapter::before { content: "── "; color: var(--muted); }
+  h1 { font-size: clamp(30px, 6vw, 42px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 12px; text-wrap: balance; }
+  .lede { font-size: 17px; color: var(--muted); max-width: 62ch; }
+  h2 { font-size: 23px; font-weight: 800; letter-spacing: -0.01em; margin: 52px 0 10px; text-wrap: balance; }
+  p { max-width: 66ch; margin: 12px 0; color: var(--muted); }
+  p b, li b { color: var(--ink); }
+  .chip { display: inline-block; padding: 1px 10px; border-radius: 999px; font-weight: 700; font-size: 13.5px; border: 1px solid var(--line); }
+  .chip.a { color: var(--gold); background: var(--a-fill); }
+  .chip.b { color: var(--accent); background: var(--b-fill); }
+  .hl-a { color: var(--gold); font-weight: 700; }
+  .hl-b { color: var(--accent); font-weight: 700; }
+  .hl-k { background: linear-gradient(transparent 62%, var(--b-fill) 62%); font-weight: 700; color: var(--ink); }
+  figure { margin: 20px 0 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 10px 6px; }
+  figure svg { display: block; width: 100%; height: auto; }
+  figcaption { font-size: 13.5px; color: var(--muted); padding: 6px 10px 10px; line-height: 1.6; }
+  .formula { background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 14px 18px; margin: 16px 0; overflow-x: auto; font-size: 17px; line-height: 2; color: var(--ink); }
+  sup, sub { line-height: 0; }
+  .controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 4px 10px 10px; font-size: 14px; color: var(--muted); }
+  .controls label { display: flex; align-items: center; gap: 10px; }
+  input[type=range] { width: min(240px, 55vw); accent-color: var(--accent); }
+  input[type=range]:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  .readout { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ink); min-width: 64px; }
+  .verdict { font-weight: 700; }
+  .steps { counter-reset: s; padding: 0; margin: 16px 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  .steps li { position: relative; padding-left: 44px; max-width: 66ch; color: var(--muted); }
+  .steps li::before { counter-increment: s; content: counter(s);
+    position: absolute; left: 0; top: 2px; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--panel); border: 1px solid var(--line); color: var(--gold);
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .takeaway { border-left: 3px solid var(--gold); background: var(--panel);
+    border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 20px 0; color: var(--ink); }
+  footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--line);
+    font-size: 13.5px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { color: var(--gold); }
+  a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 6px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div id="mininav">
+  <div class="inner">
+    <a class="name" href="../">Sunmin<span>.</span>Kim</a>
+    <nav>
+      <a href="../#gv">Experience</a>
+      <a href="../#projects">Projects</a>
+      <a href="../#side">Side</a>
+      <a href="../#now">Now</a>
+      <a class="here" href="./">Tech Blog</a>
+      <a class="cta" href="mailto:kimsunmin0227@gmail.com">Contact ↗</a>
+    </nav>
+  </div>
+</div>
+<div class="wrap">
+<header>
+  <div class="chapter">build log · gen AI · 2026-11-24</div>
+  <h1>How I Made a Try-On API Put Each Nail on the Right Finger</h1>
+  <p class="lede">My side project idala turns photos you love into press-on nail sets, then shows the set on a photo of your own hand. It just placed <b>2nd out of 440+ projects</b> in Perfect Corp's YouCam API hackathon. This is the honest version of how it got there: four months of image models taking my words too literally, and one long day of making a try-on API do something it was never promised to do.</p>
+</header>
+
+<figure>
+  <img src="img/idala-set.jpg" alt="idala result screen: a ten-tip press-on nail set in green and pink with a lotus, water drops and leaves, next to a panel showing the look name, palette and a quality check score of 7 out of 8." loading="lazy" style="width:100%;border-radius:10px;display:block">
+  <figcaption>What a user gets: three ten-tip sets designed from their photos. This one came from a lotus, soft green bubbles and a calm green sea.</figcaption>
+</figure>
+
+<h2>Part 1. Image models read every word literally</h2>
+<p>I started idala in <b>July 2026</b>. The idea was simple: drop in a few inspiration photos, get nail designs back. The first lesson arrived fast. Image models do not read a prompt the way a person does. <b>They draw the words.</b></p>
+<ul class="steps">
+  <li>A trend note said "glazed donut" nails, meaning a pearly finish. The model drew actual donuts.</li>
+  <li>My prompt called one design the "anchor tip", meaning the main one. In a 10-set pilot, <b>7 of 10 sets</b> had a real ⚓ on them.</li>
+  <li>"Exactly 10 tips" was ignored in <b>5 of 10</b> sets, and "no ombre" got ombre anyway.</li>
+  <li>"Charm" kept turning into a hanging pendant with a ring. Renaming it a "flat metal stud" and describing it in positive physical terms (solid, cast, lying on the surface) took dangling rings from <b>3 of 3 to 0 of 3</b>.</li>
+</ul>
+<div class="takeaway">Inside a prompt, any word with a second meaning becomes a picture. I keep a list of these trap words now, and every plan is checked against it before a single image is paid for.</div>
+<p>Since one generation could never be trusted, I stopped trying to get it right in one shot. idala generates, then a <b>vision model inspects every set</b> on 8 points (tip count, palette, physics, whether one main motif leads), and redraws anything that fails before the user sees it.</p>
+
+<h2>Part 2. The hackathon, and the real problem</h2>
+<p>For a Meta hackathon in late October I added "see it on your hand": SAM 3.1 found the nails, and an image model painted them. It worked, but the model kept quietly redrawing the whole hand. My fix was to segment the nails and composite <b>only the nail mask</b> back onto the original photo, so the skin and pose never changed.</p>
+<p>Then the YouCam API hackathon opened. Its AI Nail Transfer API does photoreal nail try-on, the kind that looks like a manicure instead of a sticker. On <b>November 1</b> I swapped it in. And within hours I hit the problem this whole post is about.</p>
+
+<h2>Part 3. One call does not know which tip goes where</h2>
+<p>idala's promise is specific. If you picked the set with the lotus on the ring finger, <b>that exact lotus tip should land on your ring finger</b>. Here is what I tried that day, in order.</p>
+<ul class="steps">
+  <li><b>Send the AI wear shot as the reference.</b> The model behind the wear shot had drawn the set slightly differently, so the wrong design landed on the hand.</li>
+  <li><b>Build the reference myself:</b> cut the five top-row tips out of the set photo and lay them on a skin-toned background. YouCam copies "tips on skin" most faithfully. Background removal by corner color failed on real product photos (acrylic stands, shadows), so I switched to SAM with the prompt "press-on nail tip" and cut each one as a rounded rectangle so 3D decorations survive.</li>
+  <li><b>Test whether order is kept.</b> I flipped the order of the tips in the reference and ran it again. The result did not flip with it. That settled it: <span class="hl-k">one call transfers the overall style, not a tip-to-finger mapping.</span></li>
+</ul>
+
+<figure>
+  <svg viewBox="0 0 680 262" role="img" aria-label="Left: one API call with five tips gives a hand where the tips land in a scrambled order. Right: five calls, each with one tip repeated, plus one base call, are composited so every tip lands on its own finger.">
+    <style>
+      .t{font:600 12px -apple-system,Segoe UI,sans-serif;fill:#9a9aa4}
+      .h{font:800 14px -apple-system,Segoe UI,sans-serif;fill:#ececf0}
+      .ok{font:700 12px -apple-system,Segoe UI,sans-serif;fill:#ffcc00}
+      .bad{font:700 12px -apple-system,Segoe UI,sans-serif;fill:#ff4444}
+    </style>
+    <text class="h" x="20" y="28">One call</text>
+    <text class="t" x="20" y="48">reference: 5 tips</text>
+    <g transform="translate(20,62)">
+      <rect x="0" width="24" height="34" rx="9" fill="#ff4444"/><rect x="30" width="24" height="34" rx="9" fill="#ffcc00"/><rect x="60" width="24" height="34" rx="9" fill="#4fc3a1"/><rect x="90" width="24" height="34" rx="9" fill="#7aa2ff"/><rect x="120" width="24" height="34" rx="9" fill="#e48bd6"/>
+      <text class="t" x="0" y="52">1</text><text class="t" x="30" y="52">2</text><text class="t" x="60" y="52">3</text><text class="t" x="90" y="52">4</text><text class="t" x="120" y="52">5</text>
+    </g>
+    <text class="t" x="20" y="148">result on the hand</text>
+    <g transform="translate(20,162)">
+      <rect x="0" width="24" height="34" rx="9" fill="#4fc3a1"/><rect x="30" width="24" height="34" rx="9" fill="#ff4444"/><rect x="60" width="24" height="34" rx="9" fill="#e48bd6"/><rect x="90" width="24" height="34" rx="9" fill="#ffcc00"/><rect x="120" width="24" height="34" rx="9" fill="#4fc3a1"/>
+      <text class="t" x="0" y="52">thumb</text><text class="t" x="112" y="52">pinky</text>
+    </g>
+    <text class="bad" x="20" y="250">style transfers, order does not</text>
+
+    <line x1="230" y1="20" x2="230" y2="250" stroke="#26262e"/>
+
+    <text class="h" x="250" y="28">Per-finger: 5 calls + 1 base, in parallel</text>
+    <g transform="translate(250,44)">
+      <text class="t" x="0" y="14">call k = tip k repeated</text>
+      <g transform="translate(0,24)"><rect width="14" height="20" rx="5" fill="#ff4444"/><rect x="17" width="14" height="20" rx="5" fill="#ff4444"/><rect x="34" width="14" height="20" rx="5" fill="#ff4444"/></g>
+      <g transform="translate(0,50)"><rect width="14" height="20" rx="5" fill="#ffcc00"/><rect x="17" width="14" height="20" rx="5" fill="#ffcc00"/><rect x="34" width="14" height="20" rx="5" fill="#ffcc00"/></g>
+      <g transform="translate(0,76)"><rect width="14" height="20" rx="5" fill="#4fc3a1"/><rect x="17" width="14" height="20" rx="5" fill="#4fc3a1"/><rect x="34" width="14" height="20" rx="5" fill="#4fc3a1"/></g>
+      <g transform="translate(0,102)"><rect width="14" height="20" rx="5" fill="#7aa2ff"/><rect x="17" width="14" height="20" rx="5" fill="#7aa2ff"/><rect x="34" width="14" height="20" rx="5" fill="#7aa2ff"/></g>
+      <g transform="translate(0,128)"><rect width="14" height="20" rx="5" fill="#e48bd6"/><rect x="17" width="14" height="20" rx="5" fill="#e48bd6"/><rect x="34" width="14" height="20" rx="5" fill="#e48bd6"/></g>
+      <text class="t" x="0" y="172">+ base call with the whole set</text>
+    </g>
+    <path d="M318 120 L388 120" stroke="#9a9aa4" stroke-width="1.5" marker-end="url(#arr)"/>
+    <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#9a9aa4"/></marker></defs>
+    <text class="t" x="322" y="110">keep only</text>
+    <text class="t" x="322" y="140">nail k</text>
+    <g transform="translate(410,58)">
+      <text class="t" x="0" y="14">composite on the base</text>
+      <g transform="translate(0,26)">
+        <rect x="0" width="24" height="34" rx="9" fill="#ff4444"/><rect x="30" width="24" height="34" rx="9" fill="#ffcc00"/><rect x="60" width="24" height="34" rx="9" fill="#4fc3a1"/><rect x="90" width="24" height="34" rx="9" fill="#7aa2ff"/><rect x="120" width="24" height="34" rx="9" fill="#e48bd6"/>
+        <text class="t" x="0" y="52">thumb</text><text class="t" x="112" y="52">pinky</text>
+      </g>
+      <text class="ok" x="0" y="122">every tip on its own finger</text>
+      <text class="t" x="0" y="142">6 API units · about 35 seconds</text>
+    </g>
+  </svg>
+  <figcaption>Left: a single transfer copies the look but not the mapping. Right: each call only has one design to place, so there is nothing to mix up. The base call fills in any finger whose own call fails.</figcaption>
+</figure>
+
+<h2>Part 4. Stop fighting the model, change the question</h2>
+<p>I could have kept rewriting the reference image, hoping the model would respect order. Instead I asked a different question: <b>what if each call only had one design to place?</b> Then there is no order to get wrong.</p>
+<ul class="steps">
+  <li><b>Find the five nails and the thumb.</b> SAM segments the hand photo into fingernails. On the back of a hand, the thumbnail sits lowest and at one end of the row, so I can sort thumb to pinky without asking the user.</li>
+  <li><b>Make five references.</b> Reference k is tip k repeated across a skin-toned background.</li>
+  <li><b>Call YouCam six times in parallel:</b> five per-finger calls plus one base call with the whole set.</li>
+  <li><b>Take one nail from each result.</b> From result k, SAM finds the nail closest to where finger k's nail was, and only those pixels are kept. YouCam does not touch anything outside the nails, so the pieces line up.</li>
+  <li><b>Composite onto the base.</b> If a finger's call fails, the base result shows there instead of a bare nail. If SAM cannot find five nails, the whole thing falls back to a single call.</li>
+</ul>
+
+<figure>
+  <img src="img/idala-tryon.jpg" alt="Before and after slider on a real hand: the left half shows bare nails, the right half shows the green lotus set applied, with skin and pose unchanged." loading="lazy" style="width:100%;border-radius:10px;display:block">
+  <figcaption>The result on a real hand, with a before and after slider. Only the nails change; skin, pose and lighting stay exactly as uploaded.</figcaption>
+</figure>
+
+<p>It costs 6 API units instead of 1 and takes about 35 seconds. For a product whose whole promise is "this exact set, on your hand", that trade was easy. It still has limits: big sculpted 3D charms (a rose, for example) are not recognized by the transfer model, and those fingers fall back to the base pass.</p>
+
+<h2>What I am taking away</h2>
+<ul class="steps">
+  <li><b>Treat a generative API as a renderer, not a planner.</b> Move the control problem (which design goes where) into your own code, and give the model only small, unambiguous jobs.</li>
+  <li><b>Test the assumption before tuning the prompt.</b> One flipped-order experiment saved me from a day of prompt tweaks that could never have worked.</li>
+  <li><b>Every model output needs a second check.</b> In idala that is a vision inspector for designs and a fallback base pass for try-on.</li>
+</ul>
+<div class="takeaway">Six small, well-framed calls beat one big ambiguous one.</div>
+
+<p>You can see the demo video and the winner page on <a href="https://devpost.com/software/idala" style="color:var(--accent)">Devpost</a>, and the code is on <a href="https://github.com/nimnusmik/E-dal-art" style="color:var(--accent)">GitHub</a>.</p>
+
+<footer>
+  <span>Sunmin (Mina) Kim · <a href="../">portfolio</a></span>
+  <span>YouCam API Hackathon, 2nd of 440+ projects</span>
+</footer>
+</div>
+</body>
+</html>
